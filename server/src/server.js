@@ -8,6 +8,6 @@ const path = require('path');
 
 const creationRouter = require('./routes/creation_router.js');
 
-server.use('/api/create', creationRouter);
+server.use('/api/admin', creationRouter);
 
 module.exports = server;

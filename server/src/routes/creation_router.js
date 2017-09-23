@@ -1,6 +1,12 @@
 'use strict';
 
+const admin = require("firebase-admin");
+
 const bodyParser = require('body-parser');
+
+const crypto = require('crypto');
+
+const shortid = require('shortid');
 
 const express = require('express');
 const router = express.Router();
@@ -10,8 +16,88 @@ router.use(bodyParser.urlencoded({
   extended: true
 }));
 
-router.post('/', async (req, res) => {
-  res.json('test!');
+const serviceAccount = require('../../mhax-34a9e-firebase-adminsdk-sxm5w-75d76661f6.json');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: 'https://mhax-34a9e.firebaseio.com/',
 });
+
+const db = admin.database();
+const auth = admin.auth();
+const ref = db.ref('/server');
+
+router.post('/create', async (req, res) => {
+  /*
+  {
+    admin_password: <Number>, // the number
+    event_name: <String>, // the name of the event
+    description: <String>, // an optional description of the event
+    image: <String>, // an optional image for the event
+    capacity: <Number>, // number of people who can be simultaneously physically present
+    start_time: <Number>, // the start time as a unix date (milliseconds since the unix epoch)
+    end_time: <Number>, // the end time as a unix date (milliseconds since the unix epoch)
+  }
+  */
+  const lines = ref.child('lines');
+  const salt = (+new Date()).toString()
+  const hash = crypto.createHash('sha256');
+  const hashedPassword = hash.update(req.body.admin_password + salt).digest('base64');
+  const line_code = shortid.generate();
+
+  const queueObj = {
+    'capacity': req.body.capacity,
+    'event_name': req.body.event_name,
+    'line_code': line_code,
+    'description': req.body.description,
+    'image': req.body.image,
+    'start_time': req.body.start_time,
+    'end_time': req.body.end_time,
+    'in_queue': [],
+    'up_now': [],
+    'salt': salt,
+    'admin_password_hashed': hashedPassword,
+  };
+
+  lines.child(line_code).set(queueObj);
+
+  res.json({
+    line_code
+  });
+});
+
+router.post('/join', async (req, res) => {
+  /*
+  {
+    admin_password: <String>
+    line_code: <String>
+    user_id: <String>
+  }
+  */
+  const line = ref
+    .child('lines')
+    .child(req.body.line_code);
+  const user_privileges = ref
+    .child('user_privileges');
+  line.on('value', (snapshot) => {
+    const result = snapshot.val();
+    const hashedAdminPassword = result.admin_password_hashed;
+    const salt = result.salt;
+    const hash = crypto.createHash('sha256');
+    const challengeAttempt = hash.update(req.body.admin_password + salt).digest('base64');
+    if (hashedAdminPassword === challengeAttempt) {
+      user_privileges.child(req.body.user_id).set({line_code: req.body.line_code});
+      res.json({
+        status: 'success'
+      })
+    } else {
+      res.json({
+        status: 'failed'
+      })
+    }
+  });
+
+});
+
 
 module.exports = router;

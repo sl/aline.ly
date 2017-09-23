@@ -23,6 +23,8 @@
   "homepage": "https://github.com/sl/aline.ly#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
-    "express": "^4.15.4"
+    "express": "^4.15.4",
+    "firebase-admin": "^5.2.1",
+    "shortid": "^2.2.8"
   }
 }
