@@ -25,6 +25,7 @@
     "body-parser": "^1.18.2",
     "express": "^4.15.4",
     "firebase-admin": "^5.2.1",
+    "nvm": "0.0.4",
     "shortid": "^2.2.8"
   }
 }

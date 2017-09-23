@@ -20,19 +20,33 @@ export default class LinesScreen extends React.Component {
     }
 
   joinLine(code){
-      queryRef = this.db.ref("/server/lines/").orderByChild("line_code").equalTo(code)
+      queryRef = firebase.database().ref("/server/lines/").orderByChild("line_code").equalTo(code)
       queryRef.once('value').then(function(snap) {
+        if (snap.hasChild(code)){
+              var userId = firebase.auth().currentUser.uid
+              addUserRef = firebase.database().ref("/server/lines/" + code + "/in_line/");
+              addUserRef.on('value', function(snapshot) {
+                if (snapshot.hasChild(userId)) {
+                    Alert.alert(
+                        'Oops! ',
+                        "You're already in this line. Be patient, and try to do something exciting!",
+                        [
+                            {text: 'OK'},
+                        ],
+                        { cancelable: false }
+                    )
+                } else{
+                    var key = firebase.database().ref("/server/lines/" + code + "/in_line/").child(userId).key;
+                    var updates = {};
+                    updates["/server/lines/" + code + "/in_line/" + key] = new Date().getTime();
 
-          try {
-              var key = firebase.database().ref("/server/lines/" + code + "/queue_in/").child(firebase.auth().currentUser.uid).key;
-              var updates = {};
+                    firebase.database().ref().update(updates);
+                }
 
-              updates["/server/lines/" + code + "/queue_in/" + key] = "notehuoentuheont";
+              });
 
-              firebase.database().ref().update(updates);
           }
-          catch(err) {
-              console.log(err)
+          else {
               Alert.alert(
                   'Uh oh!',
                   "Looks like that line doesn't exist. Try again!",
@@ -41,7 +55,6 @@ export default class LinesScreen extends React.Component {
                   ],
                   { cancelable: false }
               )
-              this.state.lineCode = ""
           }
       });
   }
@@ -70,7 +83,7 @@ export default class LinesScreen extends React.Component {
                     />
 
                     <Button
-                        onPress={() => this.joinLine(this.state.lineCode)}
+                        onPress={() => this.joinLine(this.state.lineCode, this.state)}
                         title="Let's Go!"
                         color="#4CAF50"
                     />

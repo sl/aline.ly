@@ -2,7 +2,7 @@
   "expoServerPort": 19005,
   "expoServerNgrokUrl": "https://it-xbn.kipply.mobile-app.exp.direct",
   "packagerNgrokUrl": "https://packager.it-xbn.kipply.mobile-app.exp.direct",
-  "ngrokPid": 6691,
-  "packagerPort": 19006,
-  "packagerPid": 6674
+  "ngrokPid": 11363,
+  "packagerPort": 19007,
+  "packagerPid": 11343
 }
