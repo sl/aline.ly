@@ -22,9 +22,9 @@ const ref = db.ref('/server');
 router.post('/create', async (req, res) => {
   /*
   {
-    admin_password: <Number>, // the number
-    event_name: <String>, // the name of the event
+    event_name: <String>, // the name of the event for the line
     description: <String>, // an optional description of the event
+    password: <Number>, // the password of the line
     image: <String>, // an optional image for the event
     capacity: <Number>, // number of people who can be simultaneously physically present
     start_time: <Number>, // the start time as a unix date (milliseconds since the unix epoch)
@@ -34,7 +34,7 @@ router.post('/create', async (req, res) => {
   const lines = ref.child('lines');
   const salt = (+new Date()).toString()
   const hash = crypto.createHash('sha256');
-  const hashedPassword = hash.update(req.body.admin_password + salt).digest('base64');
+  const hashedPassword = hash.update(req.body.password + salt).digest('base64');
   const line_code = shortid.generate();
 
 
@@ -50,7 +50,7 @@ router.post('/create', async (req, res) => {
     'in_queue': [],
     'up_now': [],
     'salt': salt,
-    'admin_password_hashed': hashedPassword,
+    'password_hashed': hashedPassword,
   };
 
   lines.child(line_code).set(queueObj);
@@ -63,7 +63,7 @@ router.post('/create', async (req, res) => {
 router.post('/join', async (req, res) => {
   /*
   {
-    admin_password: <String>
+    password: <String>
     line_code: <String>
     user_id: <String>
   }
@@ -75,10 +75,10 @@ router.post('/join', async (req, res) => {
     .child('user_privileges');
   line.once('value', (snapshot) => {
     const result = snapshot.val();
-    const hashedAdminPassword = result.admin_password_hashed;
+    const hashedAdminPassword = result.password_hashed;
     const salt = result.salt;
     const hash = crypto.createHash('sha256');
-    const challengeAttempt = hash.update(req.body.admin_password + salt).digest('base64');
+    const challengeAttempt = hash.update(req.body.password + salt).digest('base64');
     if (hashedAdminPassword === challengeAttempt) {
       user_privileges.child(req.body.user_id).set({line_code: req.body.line_code});
       res.json({
