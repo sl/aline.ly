@@ -10,4 +10,7 @@ const creationRouter = require('./routes/creation_router.js');
 
 server.use('/api/admin', creationRouter);
 
+const staticPath = path.join(__dirname, '/../../client');
+server.use('/', express.static(staticPath));
+
 module.exports = server;
