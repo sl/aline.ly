@@ -1,0 +1,24 @@
+{
+  "name": "aline.ly",
+  "version": "1.0.0",
+  "description": "A system for organizing queues at large events.",
+  "main": "main.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sl/aline.ly.git"
+  },
+  "keywords": [
+    "line",
+    "queue",
+    "remote"
+  ],
+  "author": "Sam Lazarus, Carol Chen, Alex Li, Brian Chau",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sl/aline.ly/issues"
+  },
+  "homepage": "https://github.com/sl/aline.ly#readme"
+}
