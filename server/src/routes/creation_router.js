@@ -37,8 +37,6 @@ router.post('/create', async (req, res) => {
   const hashedPassword = hash.update(req.body.password + salt).digest('base64');
   const line_code = shortid.generate();
 
-
-
   const queueObj = {
     'capacity': req.body.capacity,
     'event_name': req.body.event_name,
@@ -92,6 +90,5 @@ router.post('/join', async (req, res) => {
   });
 
 });
-
 
 module.exports = router;
