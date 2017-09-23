@@ -8,6 +8,7 @@ const randColor = () => {
 };
 
 const chooseColors = (lineCode) => {
+  console.log(`Updating colors for '${lineCode}.'`);
   const colors = lines.child(lineCode).child('colors');
   colors.child('0').set(randColor());
   colors.child('1').set(randColor());
@@ -20,10 +21,8 @@ const initializeColorsForLineCode = (lineCode) => {
 };
 
 const initializeAllExisting = () => {
-  console.log('Updating colors:');
   lines.once('value', (snapshot) => {
     for (let key of Object.keys(snapshot.val())) {
-      console.log(`     - ${key}`);
       initializeColorsForLineCode(key);
     }
   });
