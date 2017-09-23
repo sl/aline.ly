@@ -1,8 +1,8 @@
 'use strict';
 
-const admin = require("firebase-admin");
-
 const bodyParser = require('body-parser');
+
+const admin = require('../util/firebaseadminutil.js');
 
 const crypto = require('crypto');
 
@@ -16,15 +16,7 @@ router.use(bodyParser.urlencoded({
   extended: true
 }));
 
-const serviceAccount = require('../../mhax-34a9e-firebase-adminsdk-sxm5w-75d76661f6.json');
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://mhax-34a9e.firebaseio.com/',
-});
-
 const db = admin.database();
-const auth = admin.auth();
 const ref = db.ref('/server');
 
 router.post('/create', async (req, res) => {
@@ -44,6 +36,8 @@ router.post('/create', async (req, res) => {
   const hash = crypto.createHash('sha256');
   const hashedPassword = hash.update(req.body.admin_password + salt).digest('base64');
   const line_code = shortid.generate();
+
+
 
   const queueObj = {
     'capacity': req.body.capacity,
@@ -79,7 +73,7 @@ router.post('/join', async (req, res) => {
     .child(req.body.line_code);
   const user_privileges = ref
     .child('user_privileges');
-  line.on('value', (snapshot) => {
+  line.once('value', (snapshot) => {
     const result = snapshot.val();
     const hashedAdminPassword = result.admin_password_hashed;
     const salt = result.salt;
