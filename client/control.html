@@ -10,6 +10,8 @@
 
     <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase.js"></script>
     <script>
+    const PHYSICAL_PERSON_STR = '__PHYSICAL_PERSON__';
+
     $('document').ready(function() {
       function getQueryVariable(variable) {
         const query = window.location.search.substring(1);
@@ -69,6 +71,11 @@
             });
           };
 
+          window.addPhysicalPerson = function() {
+            lines.child(PHYSICAL_PERSON_STR).set(+new Date());
+            console.log('added a physical person to the queue');
+          };
+
           lineRef.on('value', (finalSnap) => {
             const lineObjValue = finalSnap.val();
             const color1 = lineObjValue.colors['0'];
@@ -77,6 +84,19 @@
             document.getElementById('color-card-1').style['background-color'] = color1;
             document.getElementById('color-card-2').style['background-color'] = color2;
             document.getElementById('color-card-3').style['background-color'] = color3;
+          });
+
+          upNext.on('value', (snapshot) => {
+            const upNextVal = snapshot.val();
+            if (upNextVal.hasOwnProperty(PHYSICAL_PERSON_STR)) {
+              // do something
+              const notificationField = document.getElementById('notification');
+              const unhide = function() {
+                notificationField.style.display = 'none';
+              };
+              notificationField.style.display = 'block';
+              setTimeout(unhide, 10000);
+            }
           });
 
         }).catch((error) => {
@@ -112,6 +132,14 @@
             <div class="mdl-cell mdl-cell--4-col mdl-shadow--4dp color-card" id="color-card-1"></div>
             <div class="mdl-cell mdl-cell--4-col mdl-shadow--4dp color-card" id="color-card-2"></div>
             <div class="mdl-cell mdl-cell--4-col mdl-shadow--4dp color-card" id="color-card-3"></div>
+            <div class="mdl-layout-spacer"></div>
+          </div>
+
+          <h2 id="notification" style="display: none">Let a person in!</h2>
+
+          <div class="mdl-grid">
+            <div class="mdl-layout-spacer"></div>
+            <button onclick="addPhysicalPerson()" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">Add Physical Person</button>
             <div class="mdl-layout-spacer"></div>
           </div>
         </div>
