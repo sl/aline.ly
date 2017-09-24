@@ -45,6 +45,9 @@ const moveToActive = (line) => {
     setTimeout(() => removeFromUpNext(key, line.line_code), line.service_time * 1000 * 60);
     // send a twilio message to the user
     phones.once('value', (snapshot) => {
+      if (phoneValues == null) {
+        return;
+      }
       const phoneValues = snapshot.val();
       if (phoneValues.hasOwnProperty(key)) {
         // found a phone number, send a message to it
