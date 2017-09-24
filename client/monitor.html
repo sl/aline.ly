@@ -7,7 +7,106 @@
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/assets/styles.css">
 
+    <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase.js"></script>
     <script>
+    function getQueryVariable(variable) {
+      const query = window.location.search.substring(1);
+      const vars = query.split('&');
+      for (let i = 0; i < vars.length; i++) {
+          const pair = vars[i].split('=');
+          if (decodeURIComponent(pair[0]) == variable) {
+              return decodeURIComponent(pair[1]);
+          }
+      }
+      console.log('Query variable %s not found', variable);
+      return null;
+    }
+    // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCXnMBORL9lMwczlXaSheTBcLhs2xE6HQ4",
+        authDomain: "mhax-34a9e.firebaseapp.com",
+        databaseURL: "https://mhax-34a9e.firebaseio.com",
+        projectId: "mhax-34a9e",
+        storageBucket: "mhax-34a9e.appspot.com",
+        messagingSenderId: "919352994315"
+      };
+      firebase.initializeApp(config);
+
+      const auth = firebase.auth();
+      const db = firebase.database();
+
+      const currentLine = getQueryVariable('line_id');
+
+      const lineRef = db.ref('/server').child('lines').child(currentLine);
+      const lines = lineRef.child('in_line');
+      const upNext = lineRef.child('up_next');
+
+
+      auth.signInAnonymously().then((result) => {
+        console.log(auth.currentUser.uid);
+
+        lines.once('value', (snapshot) => {
+          const lineVal = snapshot.val();
+          if (lineVal == null || !lineVal.hasOwnProperty(auth.currentUser.uid)) {
+            upNext.once('value', (nextSnap) => {
+              const nextValue = nextSnap.val();
+              if (nextValue == null || !nextValue.hasOwnProperty(auth.currentUser.uid)) {
+                lines.child(auth.currentUser.uid).set(+new Date());
+                const section2 = document.getElementById('section2');
+                section2.style.display = 'block';
+              }
+            });
+          }
+        });
+
+        lines.on('value', (snapshot) => {
+          const lineVal = snapshot.val();
+          if (lineVal == null || !lineVal.hasOwnProperty(auth.currentUser.uid)) {
+            upNext.once('value', (nextSnap) => {
+              const nextValue = nextSnap.val();
+              console.log(nextValue);
+              if (nextValue != null && nextValue.hasOwnProperty(auth.currentUser.uid)) {
+                // we're through the line! get the colors, and hide the lines
+                const section1 = document.getElementById('section1');
+                const section2 = document.getElementById('section2');
+                section2.style.display = 'none';
+                section1.style.display = 'block';
+                lineRef.on('value', (finalSnap) => {
+                  const lineObjValue = finalSnap.val();
+                  const color1 = lineObjValue.colors['0'];
+                  const color2 = lineObjValue.colors['1'];
+                  const color3 = lineObjValue.colors['2'];
+                  document.getElementById('color-card-1').style['background-color'] = color1;
+                  document.getElementById('color-card-2').style['background-color'] = color2;
+                  document.getElementById('color-card-3').style['background-color'] = color3;
+                });
+                upNext.on('value', (finalSnap) => {
+                  const upNextVal = finalSnap.val();
+                  if (upNextVal === null || !upNextVal.hasOwnProperty(auth.currentUser.uid)) {
+                    // redirect to time's up page
+                    window.location.href = '/timesup.html';
+                  }
+                });
+              }
+            });
+            return; // safe to return here as the event will trigger again due to the change
+          }
+          const section2 = document.getElementById('section2');
+          section2.style.display = 'block';
+          const myTime = lineVal[auth.currentUser.uid];
+          // calculate position in queue
+          let position = 1;
+          for (let key of Object.keys(lineVal)) {
+            if (key !== auth.currentUser.uid && lineVal[key] < myTime) {
+              position++;
+            }
+          }
+          const rankSpan = document.getElementById('rank');
+          rankSpan.innerHTML = position;
+        });
+      }).catch((error) => {
+        console.log(error);
+      });
 
     </script>
 
@@ -16,79 +115,78 @@
       #color-card-1 { background-color: #AD1457; }
       #color-card-2 { background-color: #E040FB; }
       #color-card-3 { background-color: #2E7D32; }
+      #section1 { display: none }
+      #section2 { display: none }
     </style>
   </head>
   <body>
-
     <div class="mdl-layout mdl-js-layout mdl-color--grey-100">
       <main class="mdl-layout__content">
-
-        <div class="mdl-grid">
-          <div class="mdl-layout-spacer"></div>
-          <div class="mdl-cell mdl-cell--stretch mdl-layout-title" style="text-align: center">
-            <h3>You're Up!</h3>
-            <p>Show these colors when you arrive in line.</p>
-          </div>
-          <div class="mdl-layout-spacer"></div>
-        </div>
-
-        <div class="mdl-grid">
-          <div class="mdl-layout-spacer"></div>
-          <div class="mdl-cell mdl-cell--4-col mdl-shadow--4dp color-card" id="color-card-1"></div>
-          <div class="mdl-cell mdl-cell--4-col mdl-shadow--4dp color-card" id="color-card-2"></div>
-          <div class="mdl-cell mdl-cell--4-col mdl-shadow--4dp color-card" id="color-card-3"></div>
-          <div class="mdl-layout-spacer"></div>
-        </div>
-
-        <div style="height: 80px"></div>
-
-        <hr>
-
-        <div class="mdl-grid">
-          <div class="mdl-layout-spacer"></div>
-          <div class="mdl-cell mdl-cell--stretch mdl-layout-title" style="text-align: center">
-            <h3>Hang Tight!</h3>
-            <h2>Your Rank in Line: <span id="rank">5</span></h2>
-
-            <p>
-              Your rank is updated automatically updated on this page.
-              <br>
-              Enter your email and/or SMS below to get notified when you're up.
-            </p>
-          </div>
-          <div class="mdl-layout-spacer"></div>
-        </div>
-
-        <form action="#">
+        <div id="section1">
           <div class="mdl-grid">
             <div class="mdl-layout-spacer"></div>
-            <div class="mdl-textfield mdl-js-textfield">
-              <input class="mdl-textfield__input" type="text" id="email" name="email">
-              <label class="mdl-textfield__label" for="email">Email</label>
+            <div class="mdl-cell mdl-cell--stretch mdl-layout-title" style="text-align: center">
+              <h3>You're Up!</h3>
+              <p>Show these colors when you arrive in line.</p>
             </div>
             <div class="mdl-layout-spacer"></div>
           </div>
 
           <div class="mdl-grid">
             <div class="mdl-layout-spacer"></div>
-            <div class="mdl-textfield mdl-js-textfield">
-              <input class="mdl-textfield__input" type="text" id="phone" name="phone">
-              <label class="mdl-textfield__label" for="phone">Phone Number</label>
+            <div class="mdl-cell mdl-cell--4-col mdl-shadow--4dp color-card" id="color-card-1"></div>
+            <div class="mdl-cell mdl-cell--4-col mdl-shadow--4dp color-card" id="color-card-2"></div>
+            <div class="mdl-cell mdl-cell--4-col mdl-shadow--4dp color-card" id="color-card-3"></div>
+            <div class="mdl-layout-spacer"></div>
+          </div>
+        </div>
+        <div id="section2">
+          <div class="mdl-grid">
+            <div class="mdl-layout-spacer"></div>
+            <div class="mdl-cell mdl-cell--stretch mdl-layout-title" style="text-align: center">
+              <h3>Hang Tight!</h3>
+              <h2>Your Rank in Line: <span id="rank"></span></h2>
+
+              <p>
+                Your rank is updated automatically updated on this page.
+                <br>
+                Enter your email and/or SMS below to get notified when you're up.
+              </p>
             </div>
             <div class="mdl-layout-spacer"></div>
           </div>
 
-          <br>
+          <form action="#">
+            <div class="mdl-grid">
+              <div class="mdl-layout-spacer"></div>
+              <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="email" name="email">
+                <label class="mdl-textfield__label" for="email">Email</label>
+              </div>
+              <div class="mdl-layout-spacer"></div>
+            </div>
 
-          <div class="mdl-grid">
-            <div class="mdl-layout-spacer"></div>
-            <button class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">Create</button>
-            <div class="mdl-layout-spacer"></div>
-          </div>
-        </form>
+            <div class="mdl-grid">
+              <div class="mdl-layout-spacer"></div>
+              <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="phone" name="phone">
+                <label class="mdl-textfield__label" for="phone">Phone Number</label>
+              </div>
+              <div class="mdl-layout-spacer"></div>
+            </div>
+
+            <br>
+
+            <div class="mdl-grid">
+              <div class="mdl-layout-spacer"></div>
+              <button class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">Create</button>
+              <div class="mdl-layout-spacer"></div>
+            </div>
+          </form>
 
 
-        <div style="height: 80px"></div>
+          <div style="height: 80px"></div>
+        </div>
 
       </main>
     </div>

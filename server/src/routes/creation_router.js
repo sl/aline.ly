@@ -9,6 +9,10 @@ const crypto = require('crypto');
 const shortid = require('shortid');
 
 const express = require('express');
+
+const linemanager = require('../util/linemanager.js');
+const colorutil = require('../util/colorutil.js');
+
 const router = express.Router();
 router.use(bodyParser.raw());
 router.use(bodyParser.json());
@@ -47,17 +51,19 @@ router.post('/create', async (req, res) => {
     'image': req.body.image,
     'start_time': req.body.start_time,
     'end_time': req.body.end_time,
-    'in_queue': [],
-    'up_now': [],
     'salt': salt,
     'password_hashed': hashedPassword,
   };
-
-  lines.child(line_code).set(queueObj);
-
-  res.json({
-    line_code
-  });
+  try {
+    lines.child(line_code).set(queueObj);
+    linemanager.addHooks(line_code);
+    colorutil.initializeColorsForLineCode(line_code);
+    res.json({
+      line_code
+    });
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 router.post('/join', async (req, res) => {
