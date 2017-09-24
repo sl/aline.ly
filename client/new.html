@@ -8,103 +8,126 @@
     <link rel="stylesheet" type="text/css" href="/assets/styles.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
     <script type="application/javascript">
-
-      window.onload = function() {
+      $('document').ready(function() {
         materializeTextInputs();
         materializeSelects();
         materializeRadioButtons();
         materializeCheckboxes();
         materializeTables();
         materializeLists();
-        // materializeButtons();
-      }
+          // materializeButtons();
 
-      function materializeTextInputs() {
-        var label, parentEl;
-        document.querySelectorAll('input[type="text"], textarea').forEach(function(control) {
-          parentEl = control.parentElement;
-          control.classList.add('mdl-textfield__input');
-          if (parentEl.tagName !== 'DIV') {
-            return;
-          }
-          parentEl.classList.add('mdl-textfield', 'mdl-js-textfield');
-          label = parentEl.querySelector('label');
-          if (label) {
-            label.setAttribute('for', control.id || control.name)
-            label.classList.add('mdl-textfield__label');
-          }
-        });
-      }
-
-      function materializeSelects() {
-        var label, parentEl;
-        document.querySelectorAll('select').forEach(function(control) {
-          parentEl = control.parentElement;
-          control.classList.add('mdl-selectfield__select');
-          if (parentEl.tagName !== 'DIV') {
-            return;
-          }
-          parentEl.classList.add('mdl-selectfield', 'mdl-js-selectfield');
-          label = parentEl.querySelector('label');
-          if (label) {
-            label.setAttribute('for', control.id || control.name)
-            label.classList.add('mdl-selectfield__label');
-          }
-        });
-      }
-
-      function materializeRadioButtons() {
-        var parentEl;
-        document.querySelectorAll('input[type="radio"]').forEach(function(control) {
-          parentEl = control.parentElement;
-          control.classList.add('mdl-radio__button');
-          if (parentEl.tagName == "LABEL") {
-            parentEl.setAttribute('for', control.id || control.name)
-            parentEl.classList.add('mdl-radio', 'mdl-js-radio', 'mdl-js-ripple-effect');
-          }
-        });
-      }
-
-      function materializeCheckboxes() {
-        var parentEl;
-        document.querySelectorAll('input[type="checkbox"]').forEach(function(control) {
-          parentEl = control.parentElement;
-          control.classList.add('mdl-checkbox__input');
-          if (parentEl.tagName == "LABEL") {
-            parentEl.setAttribute('for', control.id || control.name)
-            parentEl.classList.add('mdl-checkbox', 'mdl-js-checkbox', 'mdl-js-ripple-effect');
-          }
-        });
-      }
-
-      function materializeButtons() {
-        document.querySelectorAll('button').forEach(function(control) {
-          control.classList.add('mdl-button', 'mdl-js-button', 'mdl-button--raised', 'mdl-js-ripple-effect', 'mdl-button--colored');
-        });
-      }
-
-      function materializeTables() {
-        document.querySelectorAll('table').forEach(function(table) {
-          table.classList.add('mdl-data-table', 'mdl-js-data-table');
-          table.querySelectorAll('th,td').forEach(function(cell) {
-            cell.classList.add('mdl-data-table__cell--non-numeric');
+        window.createLine = function() {
+          const props = {
+            event_name: document.getElementById('line_name').value,
+            description: document.getElementById('description').value,
+            capacity: document.getElementById('capacity').value,
+            service_time: document.getElementById('serving_time').value,
+            start_time: 0, // figure out how to get these
+            end_time: 0,
+            password: document.getElementById('password').value,
+            image: ''
+          };
+          $.ajax({
+            type: 'POST',
+            url: '/api/admin/create',
+            data: props,
+            success: function(res) {
+              // created a party, redirect to the admin console.
+              window.location.href = `/admin/${res.line_code}`;
+            },
+            dataType: 'json'
           });
-        });
-      }
+        }
 
-      function materializeLists() {
-        document.querySelectorAll('ul').forEach(function(ulEl) {
-          ulEl.classList.add('mdl-list');
-          ulEl.querySelectorAll('li').forEach(function(liEl) {
-            liEl.classList.add('mdl-list__item');
-            liEl.innerHTML = "<span class='mdl-list__item-primary-content'>" +
-                              "<i class='material-icons mdl-list__item-icon'>home</i>" +
-                              liEl.innerText + "</span>";
+        function materializeTextInputs() {
+          var label, parentEl;
+          document.querySelectorAll('input[type="text"], textarea').forEach(function(control) {
+            parentEl = control.parentElement;
+            control.classList.add('mdl-textfield__input');
+            if (parentEl.tagName !== 'DIV') {
+              return;
+            }
+            parentEl.classList.add('mdl-textfield', 'mdl-js-textfield');
+            label = parentEl.querySelector('label');
+            if (label) {
+              label.setAttribute('for', control.id || control.name)
+              label.classList.add('mdl-textfield__label');
+            }
           });
-        });
-      }
+        }
+
+        function materializeSelects() {
+          var label, parentEl;
+          document.querySelectorAll('select').forEach(function(control) {
+            parentEl = control.parentElement;
+            control.classList.add('mdl-selectfield__select');
+            if (parentEl.tagName !== 'DIV') {
+              return;
+            }
+            parentEl.classList.add('mdl-selectfield', 'mdl-js-selectfield');
+            label = parentEl.querySelector('label');
+            if (label) {
+              label.setAttribute('for', control.id || control.name)
+              label.classList.add('mdl-selectfield__label');
+            }
+          });
+        }
+
+        function materializeRadioButtons() {
+          var parentEl;
+          document.querySelectorAll('input[type="radio"]').forEach(function(control) {
+            parentEl = control.parentElement;
+            control.classList.add('mdl-radio__button');
+            if (parentEl.tagName == "LABEL") {
+              parentEl.setAttribute('for', control.id || control.name)
+              parentEl.classList.add('mdl-radio', 'mdl-js-radio', 'mdl-js-ripple-effect');
+            }
+          });
+        }
+
+        function materializeCheckboxes() {
+          var parentEl;
+          document.querySelectorAll('input[type="checkbox"]').forEach(function(control) {
+            parentEl = control.parentElement;
+            control.classList.add('mdl-checkbox__input');
+            if (parentEl.tagName == "LABEL") {
+              parentEl.setAttribute('for', control.id || control.name)
+              parentEl.classList.add('mdl-checkbox', 'mdl-js-checkbox', 'mdl-js-ripple-effect');
+            }
+          });
+        }
+
+        function materializeButtons() {
+          document.querySelectorAll('button').forEach(function(control) {
+            control.classList.add('mdl-button', 'mdl-js-button', 'mdl-button--raised', 'mdl-js-ripple-effect', 'mdl-button--colored');
+          });
+        }
+
+        function materializeTables() {
+          document.querySelectorAll('table').forEach(function(table) {
+            table.classList.add('mdl-data-table', 'mdl-js-data-table');
+            table.querySelectorAll('th,td').forEach(function(cell) {
+              cell.classList.add('mdl-data-table__cell--non-numeric');
+            });
+          });
+        }
+
+        function materializeLists() {
+          document.querySelectorAll('ul').forEach(function(ulEl) {
+            ulEl.classList.add('mdl-list');
+            ulEl.querySelectorAll('li').forEach(function(liEl) {
+              liEl.classList.add('mdl-list__item');
+              liEl.innerHTML = "<span class='mdl-list__item-primary-content'>" +
+                                "<i class='material-icons mdl-list__item-icon'>home</i>" +
+                                liEl.innerText + "</span>";
+            });
+          });
+        }
+      });
     </script>
 
   </head>
@@ -157,7 +180,7 @@
               </div>
 
               <div>
-                <input type="text" id="password" name="password">
+                <input type="password" id="password" name="password">
                 <label for="password">Password</label>
               </div>
             </div>
@@ -167,7 +190,7 @@
           <div class="mdl-grid">
             <div class="mdl-layout-spacer"></div>
             <div class="mdl-cell mdl-cell--stretch">
-              <button class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">Create</button>
+              <button onclick=createLine() class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">Create</button>
             </div>
             <div class="mdl-layout-spacer"></div>
           </div>
