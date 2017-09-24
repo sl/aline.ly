@@ -46,6 +46,9 @@ const moveToActive = (line) => {
     // send a twilio message to the user
     phones.once('value', (snapshot) => {
       const phoneValues = snapshot.val();
+      if (phoneValues == null) {
+        return;
+      }
       if (phoneValues.hasOwnProperty(key)) {
         // found a phone number, send a message to it
         const phoneNumber = phoneValues[key];

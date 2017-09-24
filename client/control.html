@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/assets/styles.css">
 
     <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase.js"></script>
@@ -26,6 +27,14 @@
         window.location.href = '/404.html';
         return null;
       }
+
+      const currentLine = getQueryVariable('line_id');
+
+      $('document').ready(function() {
+        $('.btn').attr('data-clipboard-text', `aline.ly/${currentLine}`);
+      });
+
+      new Clipboard('.btn');
       // Initialize Firebase
         var config = {
           apiKey: "AIzaSyCXnMBORL9lMwczlXaSheTBcLhs2xE6HQ4",
@@ -39,8 +48,6 @@
 
         const auth = firebase.auth();
         const db = firebase.database();
-
-        const currentLine = getQueryVariable('line_id');
 
         const lineRef = db.ref('/server').child('lines').child(currentLine);
         const lines = lineRef.child('in_line');
@@ -142,6 +149,13 @@
             <button onclick="addPhysicalPerson()" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">Add Physical Person</button>
             <div class="mdl-layout-spacer"></div>
           </div>
+
+          <div id="number-button-container" class="mdl-grid">
+            <div class="mdl-layout-spacer"></div>
+            <button class="btn mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">Copy Link</button>
+            <div class="mdl-layout-spacer"></div>
+          </div>
+
         </div>
         <div id="section2">
           <form action="#">
