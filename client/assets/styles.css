@@ -1,7 +1,9 @@
 /* Home */
 
-.site-background-image {
-  background: url('../assets/index-background.jpg') center / cover;
+.home-layout-transparent {
+  background: url('index-background.jpg') center / cover;
+  background-color: rgba(238, 238, 238, 0.81) !important;
+  background-blend-mode: color;
 }
 
 .home-layout-transparent .mdl-layout__header,
@@ -11,6 +13,12 @@
 
 .home-layout-transparent .mdl-button {
   white-space: nowrap;
+}
+
+#logo-text {
+  font-size: 80pt;
+  font-family: 'Didact Gothic', sans-serif;
+  color: #444;
 }
 
 /* Create */
