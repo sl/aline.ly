@@ -5,7 +5,7 @@ const db = admin.database();
 const lines = db.ref('/server').child('lines');
 
 const removeFromUpNext = (user, lineCode) => {
-  line.child(lineCode).child('up_next').child(user).remove();
+  lines.child(lineCode).child('up_next').child(user).remove();
 };
 
 const moveToActive = (line) => {
