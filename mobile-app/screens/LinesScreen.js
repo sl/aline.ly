@@ -31,7 +31,7 @@ export default class LinesScreen extends React.Component {
                 var userId = firebase.auth().currentUser.uid
                 addUserRef = firebase.database().ref("/server/lines/" + code + "/in_line/");
                 addUserRef.once('value', function(snapshot) {
-                    if (snapshot.hasChild(userId)) {
+                    if (snapshot.hasChild(userId))  {
                         Alert.alert(
                             'Hold!',
                             "You're already in this line. Don't stay here checking your app all the time!",
@@ -41,6 +41,7 @@ export default class LinesScreen extends React.Component {
                             { cancelable: false }
                         )
                     } else{
+
                         firebase.database().ref("/server/lines/" + code).once('value').then(function(snapshot) {
                             if (snapshot.hasChild('in_line')){
 
@@ -130,39 +131,50 @@ export default class LinesScreen extends React.Component {
 
     }
     render() {
-        return (
-            <View>
-                <ScrollView style={{width: Dimensions.get('window').width, padding: 25}}>
-                    <FlatList
-                    data={this.state.alerts}
-                    renderItem={({item}) => <ReadyLine data={item} joinLine={this.joinLine.bind(this)} />}
-                    />
-                    <Text style={styles.head}>Have a code? Input it here to get in line!</Text>
-                    <View style={{padding: 5}}>
-                        <TextInput
-                        style={{height: 40, backgroundColor: '#fff', padding: 5}}
-                        placeholder="Enter line code"
-                        onChangeText={(lineCode) => this.setState({lineCode})}
-                        value={this.state.lineCode}
+        if (this.state.alerts.length > 0){
+            return (
+                <View>
+                    <ScrollView style={{width: Dimensions.get('window').width, padding: 25}}>
+                        <FlatList
+                        data={this.state.alerts}
+                        renderItem={({item}) => <ReadyLine data={item} joinLine={this.joinLine.bind(this)} />}
                         />
-                    </View>
+                    </ScrollView>
+                </View>
 
-                    <Button
-                    onPress={() => this.joinLine(this.state.lineCode, this.state)}
-                    title="Let's Go!"
-                    color="#4CAF50"
-                    />
+            );
+        } else{
+            return (
+                <View>
+                    <ScrollView style={{width: Dimensions.get('window').width, padding: 25}}>
 
-                    <Text style={styles.title}>Your Lines</Text>
-                    <FlatList
-                    data={this.state.data}
-                    renderItem={({item}) => <Line data={item} />}
-                    />
+                        <Text style={styles.head}>Have a code? Input it here to get in line!</Text>
+                        <View style={{padding: 5}}>
+                            <TextInput
+                            style={{height: 40, backgroundColor: '#fff', padding: 5}}
+                            placeholder="Enter line code"
+                            onChangeText={(lineCode) => this.setState({lineCode})}
+                            value={this.state.lineCode}
+                            />
+                        </View>
 
-                </ScrollView>
-            </View>
+                        <Button
+                        onPress={() => this.joinLine(this.state.lineCode, this.state)}
+                        title="Let's Go!"
+                        color="#4CAF50"
+                        />
 
-        );
+                        <Text style={styles.title}>Your Lines</Text>
+                        <FlatList
+                        data={this.state.data}
+                        renderItem={({item}) => <Line data={item} />}
+                        />
+
+                    </ScrollView>
+                </View>
+
+            );
+        }
     }
 }
 
