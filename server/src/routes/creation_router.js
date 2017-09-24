@@ -23,6 +23,7 @@ router.post('/create', async (req, res) => {
   /*
   {
     event_name: <String>, // the name of the event for the line
+    service_time: <Number> // time to serve in minutes
     description: <String>, // an optional description of the event
     password: <Number>, // the password of the line
     image: <String>, // an optional image for the event
@@ -39,6 +40,7 @@ router.post('/create', async (req, res) => {
 
   const queueObj = {
     'capacity': req.body.capacity,
+    'service_time': req.body.service_time,
     'event_name': req.body.event_name,
     'line_code': line_code,
     'description': req.body.description,

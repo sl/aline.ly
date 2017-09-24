@@ -4,6 +4,10 @@ const admin = require('./firebaseadminutil.js');
 const db = admin.database();
 const lines = db.ref('/server').child('lines');
 
+const removeFromUpNext = (user, lineCode) => {
+  line.child(lineCode).child('up_next').child(user).remove();
+};
+
 const moveToActive = (line) => {
   console.log('should update!');
   const currentDate = +new Date();
@@ -39,6 +43,7 @@ const moveToActive = (line) => {
     console.log(key);
     lines.child(line.line_code).child('up_next').child(key).set(line.in_line[key]);
     lines.child(line.line_code).child('in_line').child(key).remove();
+    setTimeout(() => removeFromUpNext(key, line.line_code), line.service_time * 1000 * 60);
   }
 };
 
