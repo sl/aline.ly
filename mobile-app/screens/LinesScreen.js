@@ -7,6 +7,8 @@ import firebase from 'firebase';
 import Line from '../components/Line';
 import ReadyLine from '../components/ReadyLine';
 
+import { Permissions, Notifications } from 'expo';
+
 export default class LinesScreen extends React.Component {
     static navigationOptions = {
         title: 'Lines',
@@ -18,7 +20,8 @@ export default class LinesScreen extends React.Component {
             lineCode: "",
             signedIn: firebase.auth().currentUser,
             data: [],
-            alerts: []
+            alerts: [],
+            prevNotif: ''
         };
         this.joinLine = this.joinLine.bind(this);
     }
@@ -130,8 +133,32 @@ export default class LinesScreen extends React.Component {
         this.listenForItems();
 
     }
+
+    createNotification(notifications) {
+        for (var i in notifications){
+            if ("The " + notifications[i].event_name + " line is ready for you!" != this.state.prevNotif){
+                const localNotification = {
+                    title: "It's your turn!",
+                    body: "The " + notifications[i].event_name + " line is ready for you!",
+                    ios: { // (optional) (object) — notification configuration specific to iOS.
+                      sound: true // (optional) (boolean) — if true, play a sound. Default: false.
+                    },
+                android: // (optional) (object) — notification configuration specific to Android.
+                    {
+                      sound: true,
+                      priority: 'high',
+                      sticky: false,
+                      vibrate: true
+                    }
+                  };
+                Expo.Notifications.presentLocalNotificationAsync(localNotification)
+                this.state.prevNotif = "The " + notifications[i].event_name + " line is ready for you!"
+            }
+        }
+    }
     render() {
         if (this.state.alerts.length > 0){
+            this.createNotification(this.state.alerts);
             return (
                 <View>
                     <ScrollView style={{width: Dimensions.get('window').width, padding: 25}}>

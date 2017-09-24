@@ -9,6 +9,7 @@ import firebase from 'firebase';
 
 const config = require('./config.json');
 
+console.disableYellowBox = true;
 
 export default class App extends React.Component {
 
