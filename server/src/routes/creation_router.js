@@ -9,6 +9,10 @@ const crypto = require('crypto');
 const shortid = require('shortid');
 
 const express = require('express');
+
+const linemanager = require('../util/linemanager.js');
+const colorutil = require('../util/colorutil.js');
+
 const router = express.Router();
 router.use(bodyParser.raw());
 router.use(bodyParser.json());
@@ -23,6 +27,7 @@ router.post('/create', async (req, res) => {
   /*
   {
     event_name: <String>, // the name of the event for the line
+    service_time: <Number> // time to serve in minutes
     description: <String>, // an optional description of the event
     password: <Number>, // the password of the line
     image: <String>, // an optional image for the event
@@ -39,23 +44,26 @@ router.post('/create', async (req, res) => {
 
   const queueObj = {
     'capacity': req.body.capacity,
+    'service_time': req.body.service_time,
     'event_name': req.body.event_name,
     'line_code': line_code,
     'description': req.body.description,
     'image': req.body.image,
     'start_time': req.body.start_time,
     'end_time': req.body.end_time,
-    'in_queue': [],
-    'up_now': [],
     'salt': salt,
     'password_hashed': hashedPassword,
   };
-
-  lines.child(line_code).set(queueObj);
-
-  res.json({
-    line_code
-  });
+  try {
+    lines.child(line_code).set(queueObj);
+    linemanager.addHooks(line_code);
+    colorutil.initializeColorsForLineCode(line_code);
+    res.json({
+      line_code
+    });
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 router.post('/join', async (req, res) => {
