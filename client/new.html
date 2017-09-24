@@ -2,13 +2,20 @@
   <html>
   <head>
     <title>aline.ly</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons|Didact+Gothic">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.light_blue-green.min.css">
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/assets/styles.css">
+    <link rel="stylesheet" type="text/css" href="assets/styles.css">
 
+    <link rel="stylesheet" type="text/css" href="/assets/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    <script>
+      window.searchForRoom = function() {
+        window.location.href = '/' + document.getElementById('lineidinput').value;
+      };
+    </script>
 
     <script type="application/javascript">
       $('document').ready(function() {
@@ -129,73 +136,85 @@
         }
       });
     </script>
-
   </head>
   <body>
-    <div class="mdl-layout mdl-js-layout mdl-color--grey-100">
-      <main class="mdl-layout__content">
-        <form method="POST" action="#">
+    <div class="home-layout-transparent mdl-layout mdl-js-layout">
+      <header class="mdl-layout__header mdl-layout__header--transparent">
 
-          <div class="mdl-grid">
-            <div class="mdl-layout-spacer"></div>
+      </header>
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">aline.ly</span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="">About</a>
+          <a class="mdl-navigation__link" href="">Join Line</a>
+          <a class="mdl-navigation__link" href="">Create Line</a>
+        </nav>
+      </div>
+      <main class="mdl-layout__content" style="min-height: 100vh;">
+          <form method="POST" action="#">
 
-            <div class="mdl-cell mdl-cell--stretch">
-              <div>
-                <h3>Create a New Line</h3>
+            <div class="mdl-grid">
+              <div class="mdl-layout-spacer"></div>
+
+              <div class="mdl-cell mdl-cell--stretch">
+                <div>
+                  <h3>Create a New Line</h3>
+                </div>
+
+                <div>
+                  <input type="text" id="line_name" name="line_name">
+                  <label for="line_name">Line Name</label>
+                </div>
+
+                <div>
+                  <textarea rows="5" cols="50" id="description" name="description"></textarea>
+                  <label for="description">Line Description</label>
+                </div>
+
+                <div>
+                  Image (Optional):
+                  <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Choose</button>
+                </div>
+
+                <div>
+                  <input type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="capacity" name="capacity">
+                  <label for="capacity">Capacity</label>
+                  <span class="mdl-textfield__error">Input is not a number!</span>
+                </div>
+
+                <div>
+                  <input type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="serving_time" name="serving_time">
+                  <label for="serving_time">Serving Time</label>
+                  <span class="mdl-textfield__error">Input is not a number!</span>
+                </div>
+
+                <div>
+                  Start Time:
+                  <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Choose</button>
+                  <br>
+                  End Time:
+                  <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Choose</button>
+                </div>
+
+
+                <div>
+                  <input type="text" id="line_name" name="line_name">
+                  <label for="line_name">Line Name</label>
+                </div>
+
               </div>
-
-              <div>
-                <input type="text" id="line_name" name="line_name">
-                <label for="line_name">Line Name</label>
-              </div>
-
-              <div>
-                <textarea rows="5" cols="50" id="description" name="description"></textarea>
-                <label for="description">Line Description</label>
-              </div>
-
-              <div>
-                Image (Optional):
-                <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Choose</button>
-              </div>
-
-              <div>
-                <input type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="capacity" name="capacity">
-                <label for="capacity">Capacity</label>
-                <span class="mdl-textfield__error">Input is not a number!</span>
-              </div>
-
-              <div>
-                <input type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="serving_time" name="serving_time">
-                <label for="serving_time">Serving Time</label>
-                <span class="mdl-textfield__error">Input is not a number!</span>
-              </div>
-
-              <div>
-                Start Time:
-                <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Choose</button>
-                <br>
-                End Time:
-                <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Choose</button>
-              </div>
-
-              <div>
-                <input type="password" id="password" name="password">
-                <label for="password">Password</label>
-              </div>
+              <div class="mdl-layout-spacer"></div>
             </div>
-            <div class="mdl-layout-spacer"></div>
-          </div>
 
-          <div class="mdl-grid">
-            <div class="mdl-layout-spacer"></div>
-            <div class="mdl-cell mdl-cell--stretch">
-              <button onclick=createLine() class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">Create</button>
+            <div class="mdl-grid">
+              <div class="mdl-layout-spacer"></div>
+              <div class="mdl-cell mdl-cell--stretch">
+                <button onclick=createLine() class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">Create</button>
+              </div>
+              <div class="mdl-layout-spacer"></div>
             </div>
-            <div class="mdl-layout-spacer"></div>
-          </div>
 
-        </form>
+          </form>
       </main>
     </div>
   </body>
