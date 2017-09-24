@@ -41,6 +41,7 @@
       const lineRef = db.ref('/server').child('lines').child(currentLine);
       const lines = lineRef.child('in_line');
       const upNext = lineRef.child('up_next');
+      const phones = db.ref('/server').child('phones');
 
       window.doneButton = function() {
         upNext.child(auth.currentUser.uid).remove();
@@ -49,6 +50,32 @@
 
       auth.signInAnonymously().then((result) => {
         console.log(auth.currentUser.uid);
+
+        window.attachPhoneNumber = function() {
+          // grab the phone number from the field
+          const phoneNum = document.getElementById('phone').value;
+          const sanitized = phoneNum.replace(/[^0-9]/g, '');
+          if (!/[0-9]{10}/g.test(sanitized)) {
+            alert('invalid phone number!')
+            return;
+          }
+          phones.child(auth.currentUser.uid).set(phoneNum);
+          console.log('attched phone number!');
+          document.getElementById('phone-container').style.display = 'none';
+          document.getElementById('attached-number').style.display = 'flex';
+          document.getElementById('number-button-container').style.display = 'none';
+        };
+
+        phones.once('value', (snapshot) => {
+          if (snapshot.val().hasOwnProperty(auth.currentUser.uid)) {
+            document.getElementById('phone-container').style.display = 'none';
+            document.getElementById('attached-number').style.display = 'flex';
+            document.getElementById('number-button-container').style.display = 'none';
+            console.log('updating the existing message');
+            document.getElementById('phonemessage').innerHTML = 'We\'ll text you when you reach the front of the line!';
+            document.getElementById('rankinginfo').innerHTML = 'Your rank is updated automatically updated on this page.'
+          }
+        });
 
         lines.once('value', (snapshot) => {
           const lineVal = snapshot.val();
@@ -122,6 +149,7 @@
       #color-card-3 { background-color: #2E7D32; }
       #section1 { display: none }
       #section2 { display: none }
+      #attached-number { display: none }
     </style>
   </head>
   <body>
@@ -158,43 +186,41 @@
               <h3>Hang Tight!</h3>
               <h2>Your Rank in Line: <span id="rank"></span></h2>
 
-              <p>
+              <p id="rankinginfo">
                 Your rank is updated automatically updated on this page.
                 <br>
-                Enter your email and/or SMS below to get notified when you're up.
+                Enter your phone number below to get notified via text when you're up.
               </p>
             </div>
             <div class="mdl-layout-spacer"></div>
           </div>
 
-          <form action="#">
-            <div class="mdl-grid">
-              <div class="mdl-layout-spacer"></div>
-              <div class="mdl-textfield mdl-js-textfield">
-                <input class="mdl-textfield__input" type="text" id="email" name="email">
-                <label class="mdl-textfield__label" for="email">Email</label>
-              </div>
-              <div class="mdl-layout-spacer"></div>
+          <div id="phone-container" class="mdl-grid">
+            <div class="mdl-layout-spacer"></div>
+            <div class="mdl-textfield mdl-js-textfield">
+              <input class="mdl-textfield__input" type="text" id="phone" name="phone">
+              <label class="mdl-textfield__label" for="phone">Phone Number</label>
             </div>
+            <div class="mdl-layout-spacer"></div>
+          </div>
 
-            <div class="mdl-grid">
-              <div class="mdl-layout-spacer"></div>
-              <div class="mdl-textfield mdl-js-textfield">
-                <input class="mdl-textfield__input" type="text" id="phone" name="phone">
-                <label class="mdl-textfield__label" for="phone">Phone Number</label>
-              </div>
-              <div class="mdl-layout-spacer"></div>
+          <div id="attached-number" class="mdl-grid">
+            <div class="mdl-layout-spacer"></div>
+            <div class="mdl-cell mdl-cell--stretch mdl-layout-title">
+              <p id="phonemessage" style="text-align: center">Added your phone number! You'll get a text when you're at the front of the line!</p>
             </div>
+            <div class="mdl-layout-spacer"></div>
+          </div>
+
 
             <br>
 
-            <div class="mdl-grid">
+            <div id="number-button-container" class="mdl-grid">
 
               <div class="mdl-layout-spacer"></div>
-              <button class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">Create</button>
+              <button onclick="attachPhoneNumber()" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">Add Phone</button>
               <div class="mdl-layout-spacer"></div>
             </div>
-          </form>
 
 
           <div style="height: 80px"></div>
