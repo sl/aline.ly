@@ -26,8 +26,7 @@ const moveToActive = (line) => {
   const toMove = [];
   const inLineUsers = Object.keys(line.in_line);
   if (Object.keys(line.up_next).length < line.capacity) {
-    // sort in reverse order
-    inLineUsers.sort((a, b) => line.in_line[b] - line.in_line[a]); // sort high to low by date joined
+    inLineUsers.sort((a, b) => line.in_line[a] - line.in_line[b]); // sort high to low by date joined
   } else {
     return; // there are no open spots in up_next
   }

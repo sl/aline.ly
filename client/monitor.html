@@ -9,6 +9,7 @@
 
     <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase.js"></script>
     <script>
+
     function getQueryVariable(variable) {
       const query = window.location.search.substring(1);
       const vars = query.split('&');
@@ -41,6 +42,10 @@
       const lines = lineRef.child('in_line');
       const upNext = lineRef.child('up_next');
 
+      window.doneButton = function() {
+        upNext.child(auth.currentUser.uid).remove();
+        window.location.href = '/finished.html';
+      };
 
       auth.signInAnonymously().then((result) => {
         console.log(auth.currentUser.uid);
@@ -139,6 +144,12 @@
             <div class="mdl-cell mdl-cell--4-col mdl-shadow--4dp color-card" id="color-card-3"></div>
             <div class="mdl-layout-spacer"></div>
           </div>
+
+          <div class="mdl-grid" style="margin-top: 2em">
+            <div class="mdl-layout-spacer"></div>
+            <button onclick="doneButton()" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">i'm done</button>
+            <div class="mdl-layout-spacer"></div>
+          </div>
         </div>
         <div id="section2">
           <div class="mdl-grid">
@@ -178,6 +189,7 @@
             <br>
 
             <div class="mdl-grid">
+
               <div class="mdl-layout-spacer"></div>
               <button class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">Create</button>
               <div class="mdl-layout-spacer"></div>
