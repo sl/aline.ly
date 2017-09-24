@@ -102,10 +102,8 @@ export default class LinesScreen extends React.Component {
             snap.forEach(function(child){
                 data = child.val()
                 if (data.in_line){
-                    console.log(Object.keys(data.in_line))
                     if (Object.keys(data.in_line).indexOf(firebase.auth().currentUser.uid) !== -1){
                         listOfItems.push(data);
-                        console.log(listOfItems)
                     }
                 }
                 if (data.up_next){
