@@ -118,17 +118,17 @@
 
             <div class="mdl-cell mdl-cell--stretch">
               <div>
-                <h3>Create a New Room</h3>
+                <h3>Create a New Line</h3>
               </div>
 
               <div>
-                <input type="text" id="event_name" name="event_name">
-                <label for="event_name">Line Name</label>
+                <input type="text" id="line_name" name="line_name">
+                <label for="line_name">Line Name</label>
               </div>
 
               <div>
-                <textarea rows="5" cols="50" id="event_name" name="event_name"></textarea>
-                <label for="event_name">Line Description</label>
+                <textarea rows="5" cols="50" id="description" name="description"></textarea>
+                <label for="description">Line Description</label>
               </div>
 
               <div>
@@ -137,8 +137,15 @@
               </div>
 
               <div>
-                <input type="text" id="event_name" name="event_name">
-                <label for="event_name">Capacity</label>
+                <input type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="capacity" name="capacity">
+                <label for="capacity">Capacity</label>
+                <span class="mdl-textfield__error">Input is not a number!</span>
+              </div>
+
+              <div>
+                <input type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="serving_time" name="serving_time">
+                <label for="serving_time">Serving Time</label>
+                <span class="mdl-textfield__error">Input is not a number!</span>
               </div>
 
               <div>

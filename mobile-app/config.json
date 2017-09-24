@@ -1,0 +1,8 @@
+{
+    FIREBASE_API_KEY: "AIzaSyCXnMBORL9lMwczlXaSheTBcLhs2xE6HQ4",
+    FIREBASE_AUTH_DOMAIN: "mhax-34a9e.firebaseapp.com",
+    FIREBASE_DB_URL: "https://mhax-34a9e.firebaseio.com",
+    FIREBASE_PROJ_ID: "mhax-34a9e",
+    FIREBASE_STORAGE_BUCKET: "mhax-34a9e.appspot.com",
+    FIREBASE_MESSENGER_SENDING_ID: "919352994315"
+}
