@@ -8,7 +8,11 @@
     <link rel="stylesheet" type="text/css" href="assets/styles.css">
     <script>
       window.searchForRoom = function() {
+        console.log(document.getElementById('lineidinput').value);
         window.location.href = '/' + document.getElementById('lineidinput').value;
+      };
+      window.createForm = function() {
+        window.location.href = '/new.html';
       };
     </script>
   </head>
@@ -25,7 +29,7 @@
           <a class="mdl-navigation__link" href="">Create Line</a>
         </nav>
       </div>
-      <main class="mdl-layout__content" style="min-height: 100vh;">
+      <main class="mdl-layout__content" style="height: 100vh;">
 
         <div style="height: 50px;"></div>
 
@@ -54,9 +58,8 @@
                 <div class="mdl-cell mdl-cell--stretch" style="text-align: center;">
                   <button onclick="searchForRoom()" type="button" class="mdl-button mdl-button--raised mdl-button--accent mdl-js-button mdl-js-ripple-effect" style="margin-bottom: 15px">Join Line</button>
                   <br>
-                  <a href="new.html" style="color: #388E3C; font-size: 1.2em">
-                            New Line
-                  </a>
+
+                  <button onclick="createForm()" type="button" class="mdl-button mdl-button--raised mdl-button--accent mdl-js-button mdl-js-ripple-effect" style="margin-bottom: 15px; position: fixed; bottom: 3em; right: 3em">Create Room</button>
                 </div>
                 <div class="mdl-layout-spacer"></div>
 

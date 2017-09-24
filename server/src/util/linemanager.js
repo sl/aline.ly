@@ -3,6 +3,8 @@
 const admin = require('./firebaseadminutil.js');
 const db = admin.database();
 const lines = db.ref('/server').child('lines');
+const phones = db.ref('/server').child('phones');
+const twilioSender = require('./twilio_util.js');
 
 const removeFromUpNext = (user, lineCode) => {
   console.log(`removed user ${user} from up next`);
@@ -41,6 +43,15 @@ const moveToActive = (line) => {
     lines.child(line.line_code).child('in_line').child(key).remove();
     console.log(`setting timeout to remove user ${key}`);
     setTimeout(() => removeFromUpNext(key, line.line_code), line.service_time * 1000 * 60);
+    // send a twilio message to the user
+    phones.once('value', (snapshot) => {
+      const phoneValues = snapshot.val();
+      if (phoneValues.hasOwnProperty(key)) {
+        // found a phone number, send a message to it
+        const phoneNumber = phoneValues[key];
+        twilioSender.sendAlertText(phoneNumber, line.event_name, line.line_code);
+      }
+    });
   }
 };
 
