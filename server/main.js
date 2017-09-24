@@ -9,7 +9,7 @@ const linemanager = require('./src/util/linemanager.js');
 const main = async function main() {
   colorutils.initializeAllExisting();
   linemanager.setup();
-  if (true) {
+  if (false) {
     port = 80;
     server.listen(port, '0.0.0.0');
   } else {
