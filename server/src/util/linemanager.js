@@ -87,7 +87,7 @@ const setup = () => {
 
 const addHooks = (lineId) => {
   console.log(`Setting up event hooks for ${lineId}`);
-  lines.child(lineId).on('value', (newItem) => {
+  lines.child(lineId).child('in_line').on('value', (newItem) => {
     lines.child(lineId).once('value', (lineSnapshot) => {
       if (lineSnapshot.val() != null) {
         moveToActive(lineSnapshot.val());
