@@ -45,7 +45,7 @@
 
         function materializeTextInputs() {
           var label, parentEl;
-          document.querySelectorAll('input[type="text"], textarea').forEach(function(control) {
+          document.querySelectorAll('input[type="text"], input[type="password"], textarea').forEach(function(control) {
             parentEl = control.parentElement;
             control.classList.add('mdl-textfield__input');
             if (parentEl.tagName !== 'DIV') {
@@ -136,10 +136,12 @@
       <main class="mdl-layout__content">
         <form method="POST" action="#">
 
+          <div style="height: 50px;"></div>
+
           <div class="mdl-grid">
             <div class="mdl-layout-spacer"></div>
 
-            <div class="mdl-cell mdl-cell--stretch">
+            <div class="mdl-cell mdl-cell--stretch" style="text-align: center;">
               <div>
                 <h3>Create a New Line</h3>
               </div>
@@ -167,7 +169,7 @@
 
               <div>
                 <input type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="serving_time" name="serving_time">
-                <label for="serving_time">Serving Time</label>
+                <label for="serving_time">Time to serve one person (minutes)</label>
                 <span class="mdl-textfield__error">Input is not a number!</span>
               </div>
 
@@ -189,7 +191,7 @@
 
           <div class="mdl-grid">
             <div class="mdl-layout-spacer"></div>
-            <div class="mdl-cell mdl-cell--stretch">
+            <div class="mdl-cell mdl-cell--stretch" style="text-align: center;">
               <button onclick=createLine() class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">Create</button>
             </div>
             <div class="mdl-layout-spacer"></div>
