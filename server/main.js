@@ -9,9 +9,9 @@ const linemanager = require('./src/util/linemanager.js');
 const main = async function main() {
   colorutils.initializeAllExisting();
   linemanager.setup();
-  if (process.env.CI_ENV === 'PRODUCTION') {
+  if (true) {
     port = 80;
-    server.listen('0.0.0.0', port);
+    server.listen(port, '0.0.0.0');
   } else {
     server.listen(port);
   }
