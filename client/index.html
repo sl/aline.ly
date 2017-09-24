@@ -1,37 +1,87 @@
 <!doctype html>
-<html>
+  <html>
   <head>
     <title>aline.ly</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons|Didact+Gothic">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/assets/styles.css">
+    <link rel="stylesheet" type="text/css" href="assets/styles.css">
     <script>
       window.searchForRoom = function() {
-        const inputFieldVal = document.getElementById('lineidinput').value;
-        window.location.href = `/${inputFieldVal}`;
-      };
-      window.goToCreate = function() {
-        window.location.href = '/new.html';
+        window.location.href = '/' + document.getElementById('lineidinput').value;
       };
     </script>
   </head>
   <body>
-    <h1>aline.ly</h1>
-
-    <div>
-      <button onclick="goToCreate()" type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Create</button>
-    </div>
-
-    <form action="#">
-      <div class="mdl-textfield mdl-js-textfield">
-        <input class="mdl-textfield__input" type="text" id="lineidinput">
-        <label class="mdl-textfield__label" for="sample1">Enter a Line</label>
+    <div class="home-layout-transparent mdl-layout mdl-js-layout">
+      <header class="mdl-layout__header mdl-layout__header--transparent">
+        <div class="mdl-layout__header-row">
+          <!-- Navigation -->
+<!--
+          <div class="mdl-layout-spacer"></div>
+          <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" href="">Link</a>
+            <a class="mdl-navigation__link" href="">Link</a>
+            <a class="mdl-navigation__link" href="">Link</a>
+            <a class="mdl-navigation__link" href="">Link</a>
+          </nav>
+-->
+        </div>
+      </header>
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">Title</span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="">Link</a>
+          <a class="mdl-navigation__link" href="">Link</a>
+          <a class="mdl-navigation__link" href="">Link</a>
+          <a class="mdl-navigation__link" href="">Link</a>
+        </nav>
       </div>
-    </form>
+      <main class="mdl-layout__content">
 
-    <div>
-      <button  onclick="searchForRoom()" type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Join</button>
+        <div style="height: 50px;"></div>
+
+        <div class="mdl-grid">
+          <div class="mdl-layout-spacer"></div>
+          <div class="mdl-cell mdl-cell--stretch" style="text-align: center;">
+            <h1 id="logo-text">aline.ly</h1>
+            <p style="font-family: 'Didact Gothic', sans-serif;">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu gravida tellus, sed egestas diam. Nam vitae volutpat sapien, sit amet placerat dolor. Integer sit amet urna rutrum, aliquam ipsum vitae, aliquet nulla. Curabitur malesuada ante sapien, rhoncus gravida quam egestas vitae.
+            </p>
+            <br>
+            <a href="new.html" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" STYLE="margin-top: 20px;">
+              New Line
+            </a>
+          </div>
+          <div class="mdl-layout-spacer"></div>
+        </div>
+
+        <hr style="margin-top: 50px; margin-bottom: 50px;">
+
+        <form action="#">
+          <div class="mdl-grid">
+            <div class="mdl-layout-spacer"></div>
+
+            <div class="mdl-textfield mdl-js-textfield">
+              <input class="mdl-textfield__input" type="text" id="lineidinput">
+              <label class="mdl-textfield__label" for="lineidinput" style="text-align: center;">Enter a Line Code</label>
+            </div>
+
+            <div class="mdl-layout-spacer"></div>
+          </div>
+
+          <div class="mdl-grid">
+            <div class="mdl-layout-spacer"></div>
+            <div class="mdl-cell mdl-cell--stretch" style="text-align: center;">
+              <button onclick="searchForRoom()" type="button" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">Join Line</button>
+            </div>
+            <div class="mdl-layout-spacer"></div>
+          </div>
+        </form>
+
+        <div style="height: 100px;"></div>
+
+      </main>
     </div>
   </body>
 </html>
