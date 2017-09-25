@@ -1,18 +1,18 @@
 'use strict';
 
 const express = require('express');
-const router = express.Router();
+
 const server = express();
 const shortid = require('shortid');
 
 const admin = require('./util/firebaseadminutil.js');
+
 const db = admin.database();
 const lines = db.ref('/server/').child('lines');
 
 const path = require('path');
 
 const creationRouter = require('./routes/creation_router.js');
-const adminRouter = require('./routes/admin_router.js');
 
 server.use('/api/admin', creationRouter);
 
@@ -28,9 +28,8 @@ server.use(/\/admin\/(.*)/, async (req, res) => {
     // check if the line exists
     lines.once('value', (snapshot) => {
       const val = snapshot.val();
-      if (val.hasOwnProperty(id)) {
+      if (id in val) {
         res.redirect(`../control.html?line_id=${id}`);
-        return;
       } else {
         res.redirect('../404.html');
       }
@@ -46,7 +45,7 @@ server.use(/\/(.*)/, async (req, res) => {
     // check if the line exists
     lines.once('value', (snapshot) => {
       const val = snapshot.val();
-      if (val.hasOwnProperty(id)) {
+      if (id in val) {
         res.redirect(`monitor.html?line_id=${id}`);
       } else {
         res.redirect('404.html');

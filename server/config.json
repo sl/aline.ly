@@ -1,0 +1,14 @@
+{
+	"dev": {
+		"port": 8080,
+    "ip": null
+	},
+	"staging": {
+		"port": 8080,
+    "ip": null
+	},
+	"production": {
+		"port": 80,
+    "ip": "0.0.0.0"
+	}
+}
