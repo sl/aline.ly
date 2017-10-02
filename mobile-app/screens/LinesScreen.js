@@ -1,13 +1,20 @@
-import React from 'react';
-import { StyleSheet, Text, View, Container, Image, Button, ScrollView, Dimensions, TextInput, Alert, ListView, FlatList, ListItem } from 'react-native';
-
-const config = require('../config.json');
-
+import React from 'React';
+import {
+        StyleSheet,
+        Text,
+        View,
+        Button,
+        ScrollView,
+        Dimensions,
+        TextInput,
+        Alert,
+        FlatList,
+    } from 'react-native';
+import { Notifications } from 'expo';
 import firebase from 'firebase';
+
 import Line from '../components/Line';
 import ReadyLine from '../components/ReadyLine';
-
-import { Permissions, Notifications } from 'expo';
 
 export default class LinesScreen extends React.Component {
     static navigationOptions = {
@@ -27,12 +34,12 @@ export default class LinesScreen extends React.Component {
     }
 
     joinLine(code){
-        queryRef = firebase.database().ref("/server/lines/").orderByChild("line_code").equalTo(code);
-        let ctx = this;
+        // this shourd all go to the backend
+        const queryRef = firebase.database().ref("/server/lines/").orderByChild("line_code").equalTo(code);
         queryRef.once('value').then(function(snap) {
             if (snap.hasChild(code)){
                 var userId = firebase.auth().currentUser.uid
-                addUserRef = firebase.database().ref("/server/lines/" + code + "/in_line/");
+                const addUserRef = firebase.database().ref("/server/lines/" + code + "/in_line/");
                 addUserRef.once('value', function(snapshot) {
                     if (snapshot.hasChild(userId))  {
                         Alert.alert(
@@ -44,7 +51,6 @@ export default class LinesScreen extends React.Component {
                             { cancelable: false }
                         )
                     } else{
-
                         firebase.database().ref("/server/lines/" + code).once('value').then(function(snapshot) {
                             if (snapshot.hasChild('in_line')){
 
@@ -62,8 +68,8 @@ export default class LinesScreen extends React.Component {
                                 )
 
                             } else {
-                                var key = firebase.database().ref("/server/lines/" + code + '/').child('in_line').key;
-                                var updates = {};
+                                key = firebase.database().ref("/server/lines/" + code + '/').child('in_line').key;
+                                updates = {};
 
                                 updates["/server/lines/" + code + "/" + key + '/' + userId + '/'] = new Date().getTime()
                                 firebase.database().ref().update(updates);
@@ -94,13 +100,14 @@ export default class LinesScreen extends React.Component {
             }
         });
     }
-    listenForItems(code){
+    listenForItems(){
+        // can be done properly with one query, then I should also attach this to the notification call
         let ctx = this;
         firebase.database().ref().child('/server/lines/').on('value', (snap) => {
             var listOfItems = []
             var listOfAlerts = []
             snap.forEach(function(child){
-                data = child.val()
+                var data = child.val()
                 if (data.in_line){
                     if (Object.keys(data.in_line).indexOf(firebase.auth().currentUser.uid) !== -1){
                         listOfItems.push(data);
@@ -119,22 +126,13 @@ export default class LinesScreen extends React.Component {
         });
     }
     componentDidMount() {
-
-        if (!this.state.signedIn){
-            firebase.auth().signInAnonymously().catch(function(error) {
-                // Handle Errors here.
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                // ...
-            });
-        }
         this.listenForItems();
 
     }
 
     createNotification(notifications) {
         for (var i in notifications){
-            if ("The " + notifications[i].event_name + " line is ready for you!" != this.state.prevNotif){
+            if (notifications[i].event_name != this.state.prevNotif){
                 const localNotification = {
                     title: "It's your turn!",
                     body: "The " + notifications[i].event_name + " line is ready for you!",
@@ -149,14 +147,17 @@ export default class LinesScreen extends React.Component {
                       vibrate: true
                     }
                   };
-                Expo.Notifications.presentLocalNotificationAsync(localNotification)
-                this.state.prevNotif = "The " + notifications[i].event_name + " line is ready for you!"
+                Notifications.presentLocalNotificationAsync(localNotification)
+                this.setState({
+                    prevNotif: notifications[i].event_name
+                })
             }
         }
     }
     render() {
         if (this.state.alerts.length > 0){
             this.createNotification(this.state.alerts);
+            // Create another Component to display all the ready lists
             return (
                 <View>
                     <ScrollView style={{width: Dimensions.get('window').width, padding: 25}}>
@@ -166,9 +167,9 @@ export default class LinesScreen extends React.Component {
                         />
                     </ScrollView>
                 </View>
-
             );
         } else{
+            // Create another Component to display all the lines they're currrently in
             return (
                 <View>
                     <ScrollView style={{width: Dimensions.get('window').width, padding: 25}}>

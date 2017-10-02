@@ -3,11 +3,11 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from './navigation/RootNavigation';
-import LoginScreen from './screens/LoginScreen'
+import SplashScreen from './screens/SplashScreen'
 
 import firebase from 'firebase';
 
-const config = require('./config.json');
+import config from './config.json';
 
 console.disableYellowBox = true;
 
@@ -57,10 +57,10 @@ export default class App extends React.Component {
     }
 
   render() {
-    if (!this.state.assetsAreLoaded && !this.props.skipLoadingScreen) {
+    if (!this.state.assetsAreLoaded) {
       return <AppLoading />;
   } else if(!firebase.auth().currentUser){
-      return(<LoginScreen/>)
+      return(<SplashScreen/>)
   }
     else {
       return (
