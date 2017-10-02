@@ -1,11 +1,14 @@
+'use strict';
+
 const admin = require('./firebaseadminutil.js');
+
 const db = admin.database();
 const lines = db.ref('/server').child('lines');
 
-const randColor = () => {
+const randColor = () =>
   // gets a random number between hex #000000 and #FFFFFF
-  return '#' + Math.floor(Math.random()*16777215).toString(16);
-};
+  `#${Math.floor(Math.random() * 16777215).toString(16)}`
+;
 
 const chooseColors = (lineCode) => {
   const colors = lines.child(lineCode).child('colors');
@@ -22,9 +25,9 @@ const initializeColorsForLineCode = (lineCode) => {
 const initializeAllExisting = () => {
   lines.once('value', (snapshot) => {
     if (snapshot.val() != null) {
-      for (let key of Object.keys(snapshot.val())) {
+      Object.keys(snapshot.val()).forEach((key) => {
         initializeColorsForLineCode(key);
-      }
+      });
     }
   });
 };
@@ -32,4 +35,4 @@ const initializeAllExisting = () => {
 module.exports = {
   initializeColorsForLineCode,
   initializeAllExisting,
-}
+};

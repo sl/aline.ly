@@ -25,7 +25,6 @@
                 }
             }
             console.log('Query variable %s not found', variable);
-            window.location.href = '/404.html';
             return null;
           }
 
@@ -94,16 +93,27 @@
                 document.getElementById('color-card-3').style['background-color'] = color3;
               });
 
+              let isVisible = false;
+              const number = 1;
+
               upNext.on('value', (snapshot) => {
                 const upNextVal = snapshot.val();
                 if (upNextVal.hasOwnProperty(PHYSICAL_PERSON_STR)) {
                   // do something
-                  const notificationField = document.getElementById('notification');
-                  const unhide = function() {
-                    notificationField.style.display = 'none';
-                  };
-                  notificationField.style.display = 'block';
-                  setTimeout(unhide, 10000);
+                  if (isVisible) {
+                    number++;
+                    const notificationField = document.getElementById('notification');
+                    notificationField.innerHTML = `Let ${number} in!`;
+                  } else {
+                    isVisible = true;
+                    const unhide = function() {
+                      $('#notification').fadeOut('fast', function() {
+                        isVisible = false;
+                      });
+                    };
+                    $('#notification').fadeIn('fast', function() {});
+                    setTimeout(unhide, 3000);
+                  }
                 }
               });
 
@@ -154,8 +164,6 @@
             <div class="mdl-layout-spacer"></div>
           </div>
 
-          <h2 id="notification" style="display: none">Let a person in!</h2>
-
           <div class="mdl-grid">
             <div class="mdl-layout-spacer"></div>
             <button onclick="addPhysicalPerson()" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">Add Physical Person</button>
@@ -167,6 +175,16 @@
             <button class="btn mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">Copy Link</button>
             <div class="mdl-layout-spacer"></div>
           </div>
+
+          <div class="mdl-grid">
+            <div class="mdl-layout-spacer"></div>
+            <div class="mdl-cell mdl-cell--stretch mdl-layout-title" style="text-align: center">
+              <h2 id="notification" style="display: none">Let 1 person in!</h2>
+            </div>
+            <div class="mdl-layout-spacer"></div>
+          </div>
+
+
 
         </div>
 

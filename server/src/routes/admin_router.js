@@ -11,7 +11,7 @@ const router = express.Router();
 router.use(bodyParser.raw());
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({
-  extended: true
+  extended: true,
 }));
 
 const db = admin.database();
@@ -25,7 +25,7 @@ router.get(/\/(.*)/, async (req, res) => {
     // check if the line exists
     lines.once('value', (snapshot) => {
       const val = snapshot.val();
-      if (val.hasOwnProperty(id)) {
+      if (id in val) {
         res.redirect(`admin.html?line_id=${id}`);
       } else {
         res.redirect('404.html');

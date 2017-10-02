@@ -17,7 +17,7 @@ const router = express.Router();
 router.use(bodyParser.raw());
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({
-  extended: true
+  extended: true,
 }));
 
 const db = admin.database();
@@ -37,29 +37,29 @@ router.post('/create', async (req, res) => {
   }
   */
   const lines = ref.child('lines');
-  const salt = (+new Date()).toString()
+  const salt = (+new Date()).toString();
   const hash = crypto.createHash('sha256');
   const hashedPassword = hash.update(req.body.password + salt).digest('base64');
-  const line_code = shortid.generate();
+  const lineCode = shortid.generate();
 
   const queueObj = {
-    'capacity': req.body.capacity,
-    'service_time': req.body.service_time,
-    'event_name': req.body.event_name,
-    'line_code': line_code,
-    'description': req.body.description,
-    'image': req.body.image,
-    'start_time': req.body.start_time,
-    'end_time': req.body.end_time,
-    'salt': salt,
-    'password_hashed': hashedPassword,
+    capacity: req.body.capacity,
+    service_time: req.body.service_time,
+    event_name: req.body.event_name,
+    line_code: lineCode,
+    description: req.body.description,
+    image: req.body.image,
+    start_time: req.body.start_time,
+    end_time: req.body.end_time,
+    salt,
+    password_hashed: hashedPassword,
   };
   try {
-    lines.child(line_code).set(queueObj);
-    linemanager.addHooks(line_code);
-    colorutil.initializeColorsForLineCode(line_code);
+    lines.child(lineCode).set(queueObj);
+    linemanager.addHooks(lineCode);
+    colorutil.initializeColorsForLineCode(lineCode);
     res.json({
-      line_code
+      lineCode,
     });
   } catch (e) {
     console.log(e);
@@ -77,7 +77,7 @@ router.post('/join', async (req, res) => {
   const line = ref
     .child('lines')
     .child(req.body.line_code);
-  const user_privileges = ref
+  const userPrivileges = ref
     .child('user_privileges');
   line.once('value', (snapshot) => {
     const result = snapshot.val();
@@ -86,17 +86,16 @@ router.post('/join', async (req, res) => {
     const hash = crypto.createHash('sha256');
     const challengeAttempt = hash.update(req.body.password + salt).digest('base64');
     if (hashedAdminPassword === challengeAttempt) {
-      user_privileges.child(req.body.user_id).set({line_code: req.body.line_code});
+      userPrivileges.child(req.body.user_id).set({ line_code: req.body.line_code });
       res.json({
-        status: 'success'
-      })
+        status: 'success',
+      });
     } else {
       res.json({
-        status: 'failed'
-      })
+        status: 'failed',
+      });
     }
   });
-
 });
 
 module.exports = router;
