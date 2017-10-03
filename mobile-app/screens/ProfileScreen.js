@@ -1,8 +1,6 @@
 import React from 'react';
-import { WebBrowser } from 'expo';
-import { View, StyleSheet, Text, Image, TextInput, Button } from 'react-native';
-
-import { MonoText } from '../components/StyledText';
+import { View, StyleSheet } from 'react-native';
+import { Text } from 'react-native';
 import firebase from 'firebase';
 import Dimensions from 'Dimensions';
 
@@ -19,19 +17,11 @@ export default class SettingsScreen extends React.Component {
   }
 
   render() {
-      console.log(this.state.user);
     return(
         <View style={{width: Dimensions.get('window').width, padding: 25}}>
             <Text fontWeight='bold'>ID: </Text><Text>{this.state.user.uid}</Text>
-
-            </View>
+        </View>
     );
   }
 
 }
-
-const styles = StyleSheet.create({
-    title: {
-        fontSize: 25,
-    }
-});
