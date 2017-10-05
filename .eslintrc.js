@@ -14,7 +14,8 @@ module.exports = {
       "class-methods-use-this": ["off"],
       "react/jsx-filename-extension": ["off"],
       "global-require": ["off"],
-      "react/prop-types": ["off"]
+      "react/prop-types": ["off"],
+      "no-prototype-builtins": ["off"]
     },
     "env": {
       "node": true
