@@ -28,7 +28,7 @@ server.use(/\/admin\/(.*)/, async (req, res) => {
     // check if the line exists
     lines.once('value', (snapshot) => {
       const val = snapshot.val();
-      if (val.hasOwnProperty(id)) {
+      if (id in val) {
         res.redirect(`../control.html?line_id=${id}`);
       } else {
         res.redirect('../404.html');
@@ -45,7 +45,7 @@ server.use(/\/(.*)/, async (req, res) => {
     // check if the line exists
     lines.once('value', (snapshot) => {
       const val = snapshot.val();
-      if (val.hasOwnProperty(id)) {
+      if (id in val) {
         res.redirect(`monitor.html?line_id=${id}`);
       } else {
         res.redirect('404.html');
