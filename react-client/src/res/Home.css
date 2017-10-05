@@ -1,0 +1,32 @@
+body {
+  text-align: center;
+}
+
+.home-content-wrapper {
+  background: url('index-background.jpg') center / cover;
+  background-color: rgba(238, 238, 238, 0.81) !important;
+  background-blend-mode: color;
+  width: 100vw;
+  height: 100vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+}
+
+h1 {
+  font-size: 7em;
+  color: #444;
+  font-weight: 200;
+  margin-top: 1.45em;
+  margin-bottom: 0.1em;
+  letter-spacing: -0.05em;
+  font-family: 'Didact Gothic', sans-serif;
+}
+
+h2 {
+  margin-top: 1em;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  font-family: 'Didact Gothic', sans-serif;
+}
