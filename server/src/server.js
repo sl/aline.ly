@@ -18,6 +18,8 @@ server.use('/api/admin', creationRouter);
 
 const staticPath = path.join(__dirname, '/../../client');
 
+module.exports = server;
+
 server.use('/', express.static(staticPath));
 
 server.use(/\/admin\/(.*)/, async (req, res) => {
@@ -37,6 +39,12 @@ server.use(/\/admin\/(.*)/, async (req, res) => {
   }
 });
 
+server.get('/api/line_id', async (req, res) => {
+    lines.once('value', (snap) => {
+      res.json({ lines: Object.keys(snap.val()) })
+    });
+});
+
 server.use(/\/(.*)/, async (req, res) => {
   const id = req.params[0];
   if (!shortid.isValid(id)) {
@@ -53,5 +61,3 @@ server.use(/\/(.*)/, async (req, res) => {
     });
   }
 });
-
-module.exports = server;
