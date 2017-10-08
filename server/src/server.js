@@ -39,10 +39,19 @@ server.use(/\/admin\/(.*)/, async (req, res) => {
   }
 });
 
-server.get('/api/line_id', async (req, res) => {
-    lines.once('value', (snap) => {
-      res.json({ lines: Object.keys(snap.val()) })
+server.get('/api/lines', async (req, res) => {
+  var lineData = [];
+  lines.once('value', (snap) => {
+    var data = snap.val()
+    Object.keys(data).forEach(key => {
+        lineData.push({
+          id: key,
+          code: data[key].line_code || null,
+          inLine: data[key].in_line || null
+        })
     });
+    res.json({ lines: lineData})
+  })
 });
 
 server.use(/\/(.*)/, async (req, res) => {
