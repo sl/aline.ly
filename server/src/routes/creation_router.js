@@ -59,7 +59,7 @@ router.post('/create', async (req, res) => {
     linemanager.addHooks(lineCode);
     colorutil.initializeColorsForLineCode(lineCode);
     res.json({
-      lineCode,
+      line_code: lineCode,
     });
   } catch (e) {
     console.log(e);
