@@ -50,7 +50,7 @@ server.get('/api/lines', async (req, res) => {
           inLine: data[key].in_line || null
         })
     });
-    res.json({ lines: lineData})
+    res.json({lines: lineData})
   })
 });
 

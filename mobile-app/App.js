@@ -3,7 +3,7 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from './navigation/RootNavigation';
-import SplashScreen from './screens/SplashScreen'
+import SplashScreen from './screens/SplashScreen';
 
 import firebase from 'firebase';
 
@@ -12,63 +12,60 @@ import config from './config.json';
 console.disableYellowBox = true;
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props);
 
-    constructor(props) {
-        super(props);
-
-        firebase.initializeApp({
-            apiKey: config.FIREBASE_API_KEY,
-            authDomain: config.FIREBASE_AUTH_DOMAIN,
-            databaseURL: config.FIREBASE_DB_URL,
-            projectId: config.FIREBASE_PROJ_ID,
-            storageBucket: config.FIREBASE_STORAGE_BUCKET,
-            messagingSenderId: config.FIREBASE_MESSENGER_SENDING_ID
-        });
-        this.state = {
-            signedIn: firebase.auth().currentUser,
-            session: null
-        };
-    }
-
-    componentDidMount() {
-        const ctx = this;
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-                ctx.setState({signedIn: true});
-            } else {
-                ctx.setState({signedIn: false});
-            }
-        });
-    }
-
-    load(key) {
-        this.setState({ session: key });
-    }
-    exit() {
-        this.setState({ session: null });
-    }
-
-    state = {
-        assetsAreLoaded: false,
+    firebase.initializeApp({
+      apiKey: config.FIREBASE_API_KEY,
+      authDomain: config.FIREBASE_AUTH_DOMAIN,
+      databaseURL: config.FIREBASE_DB_URL,
+      projectId: config.FIREBASE_PROJ_ID,
+      storageBucket: config.FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: config.FIREBASE_MESSENGER_SENDING_ID,
+    });
+    this.state = {
+      signedIn: firebase.auth().currentUser,
+      session: null,
     };
+  }
 
-    componentWillMount() {
-        this._loadAssetsAsync();
-    }
+  componentDidMount() {
+    const ctx = this;
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        ctx.setState({ signedIn: true });
+      } else {
+        ctx.setState({ signedIn: false });
+      }
+    });
+  }
+
+  load(key) {
+    this.setState({ session: key });
+  }
+  exit() {
+    this.setState({ session: null });
+  }
+
+  state = {
+    assetsAreLoaded: false,
+  };
+
+  componentWillMount() {
+    this._loadAssetsAsync();
+  }
 
   render() {
     if (!this.state.assetsAreLoaded) {
       return <AppLoading />;
-  } else if(!firebase.auth().currentUser){
-      return(<SplashScreen/>)
-  }
-    else {
+    } else if (!firebase.auth().currentUser) {
+      return <SplashScreen />;
+    } else {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          {Platform.OS === 'android' &&
-            <View style={styles.statusBarUnderlay} />}
-          <RootNavigation/>
+          {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
+          <RootNavigation />
         </View>
       );
     }
@@ -86,7 +83,7 @@ export default class App extends React.Component {
           Ionicons.font,
           // We include SpaceMono because we use it in HomeScreen.js. Feel free
           // to remove this if you are not using it in your app
-          { 'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf') },
+          { 'didact-gothic': require('./assets/fonts/DidactGothic-Regular.ttf') },
         ]),
       ]);
     } catch (e) {

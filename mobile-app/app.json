@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "mobile-app",
-    "description": "No description",
-    "slug": "mobile-app",
+    "name": "aline",
+    "description": "Waiting out of line.",
+    "slug": "aline",
     "privacy": "public",
     "sdkVersion": "20.0.0",
     "version": "1.0.0",
@@ -15,13 +15,21 @@
     },
     "loading": {
       "icon": "./assets/icons/loading-icon.png",
-      "hideExponentText": false
+      "hideExponentText": true
     },
     "packagerOpts": {
       "assetExts": ["ttf"]
     },
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.aline.ly",
+      "versionCode": 1,
+      "permissions": [
+        "VIBRATE",
+        "com.android.launcher.permission.INSTALL_SHORTCUT",
+      ],
     }
   }
 }

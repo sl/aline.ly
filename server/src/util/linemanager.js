@@ -57,6 +57,8 @@ const moveToActive = (line) => {
       .child(key)
       .remove();
 
+    db.ref('/server/users/' + key + '/').child(line.line_code).set(-1)
+
     // set timer after which to remove the user from up next
     setTimeout(() => removeFromUpNext(key, line.line_code),
       line.service_time * 1000 * 60);
