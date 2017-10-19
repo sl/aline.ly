@@ -14,9 +14,6 @@ export default TabNavigator(
     Lines: {
       screen: LinesScreen,
     },
-    Profile: {
-      screen: ProfileScreen,
-    },
   },
   {
     navigationOptions: ({ navigation }) => ({
@@ -25,14 +22,8 @@ export default TabNavigator(
         let iconName;
         switch (routeName) {
           case 'Lines':
-            iconName = Platform.OS === 'ios'
-              ? `ios-home${focused ? '' : '-outline'}`
-              : 'md-home';
+            iconName = Platform.OS === 'ios' ? `ios-home${focused ? '' : '-outline'}` : 'md-home';
             break;
-          case 'Profile':
-            iconName = Platform.OS === 'ios'
-              ? `ios-person${focused ? '' : '-outline'}`
-              : 'md-person';
         }
         return (
           <Ionicons

@@ -38,7 +38,7 @@ class Lines extends Component {
       var lineInfo = {
         name: data[0],
         description: data[1],
-        length: Object.keys(data[2]).length,
+        length: Object.keys(data[2]).length - 2,
         image: data[3],
         endTime: data[4],
         serviceTime: data[5],
@@ -60,10 +60,8 @@ class Lines extends Component {
       ctx.setState({
         waitingLines: updatedWaitingLines,
       });
-      console.log('waiting lines state set' + JSON.stringify(this.state.waitingLines));
     });
     if (!this.props.lines.length) {
-      console.log('hiii');
       this.setState({
         waitingLines: [],
       });
@@ -74,16 +72,14 @@ class Lines extends Component {
     if (this.state.waitingLines.length) {
       return (
         <View style={{ paddingBottom: 75 }}>
-          <Text style={styles.title}>Your Lines{JSON.stringify(this.props.lines)}</Text>
+          <Text style={styles.title}>Your Lines</Text>
           <FlatList data={this.props.lines} renderItem={({ item }) => <Line line={item} />} />
         </View>
       );
     } else {
       return (
         <View>
-          <Text style={{ textAlign: 'center', paddingTop: 20 }}>
-            You are not in any lines!{JSON.stringify(this.props.lines)}
-          </Text>
+          <Text style={{ textAlign: 'center', paddingTop: 20 }}>You are not in any lines!</Text>
         </View>
       );
     }

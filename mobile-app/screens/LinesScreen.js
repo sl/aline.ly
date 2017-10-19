@@ -166,7 +166,7 @@ export default class LinesScreen extends React.Component {
     if (this.state.readyLine) {
       return (
         <View>
-          <Text style={styles.title}>aline{JSON.stringify(this.state.data)}</Text>
+          <Text style={styles.title}>aline</Text>
           <ScrollView style={{ width: Dimensions.get('window').width, padding: 25 }}>
             <ReadyLine line={this.state.readyLine} />
             <TimerDisplay timeLeft={this.state.timer} />
@@ -177,7 +177,7 @@ export default class LinesScreen extends React.Component {
       if (this.state.data) {
         return (
           <ScrollView style={{ width: Dimensions.get('window').width, padding: 25 }}>
-            <Text style={styles.title}>aline{JSON.stringify(this.state.data)}</Text>
+            <Text style={styles.title}>aline</Text>
             <LineJoinForm />
             <Lines lines={this.state.data} />
           </ScrollView>

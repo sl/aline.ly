@@ -32,7 +32,7 @@ class LineJoinForm extends Component {
           const userId = firebase.auth().currentUser.uid;
 
           // If line is empty or user is already in the line
-          if (!line.inLine || Object.keys(line.inLine).indexOf(userId) > 0) {
+          if ((line.inLine && Object.keys(line.inLine).indexOf(userId) > -1) || !line.inLine) {
             var inLineUrl = '/server/lines/' + line.code + '/in_line/';
             var lineKey = this.db.ref(inLineUrl).child(userId).key;
             var lineUpdates = {};
@@ -67,7 +67,7 @@ class LineJoinForm extends Component {
   render() {
     return (
       <View>
-        <Text style={styles.head}>Have a code? Input it here to get in line!</Text>
+        <Text style={styles.head}>Have a line code? Input it here to get in line!</Text>
         <View style={{ padding: 5 }}>
           <TextInput
             style={styles.textField}

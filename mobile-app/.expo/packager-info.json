@@ -1,8 +1,8 @@
 {
-  "expoServerPort": 19005,
-  "packagerPort": 19006,
-  "packagerPid": 7748,
-  "expoServerNgrokUrl": "https://vd-3nk.kipply.mobile-app.exp.direct",
-  "packagerNgrokUrl": "https://packager.vd-3nk.kipply.mobile-app.exp.direct",
-  "ngrokPid": 7765
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null
 }

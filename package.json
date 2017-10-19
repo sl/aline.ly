@@ -27,6 +27,7 @@
     "express": "^4.15.4",
     "firebase-admin": "^5.2.1",
     "nvm": "0.0.4",
+    "prop-types": "^15.6.0",
     "shortid": "^2.2.8",
     "twilio": "^3.6.7"
   },
