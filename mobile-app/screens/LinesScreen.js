@@ -32,7 +32,14 @@ export default class LinesScreen extends React.Component {
     const lineUrl = '/server/lines/' + code + '/up_next/';
     this.db.ref(lineUrl).on('value', snap => {
       const data = snap.val();
-      if (!data || Object.keys(data).indexOf(userId) == -1) {
+      if (data && Object.keys(data).indexOf(userId) < 0) {
+        console.log('decede to delet');
+        ctx.setState({
+          readyLine: null,
+        });
+        removeFromUserLines(code);
+      } else if (!data) {
+        setTimeout(function() {}, 500);
         ctx.setState({
           readyLine: null,
         });
@@ -58,10 +65,6 @@ export default class LinesScreen extends React.Component {
       return lineInfo;
     });
   }
-  async collectInfo(code) {
-    let data = await this.getInfo(code);
-    return data;
-  }
   async startTimer(time) {
     this.setState({ timer: time });
     while (this.state.timer > -1) {
@@ -82,6 +85,7 @@ export default class LinesScreen extends React.Component {
       const lineRef = this.db.ref('server/lines/' + code + '/');
       var lineInfo = await this.getInfo(code);
       lineInfo = JSON.parse(JSON.stringify(lineInfo));
+      console.log('upn enxte');
       this.startTimer(lineInfo.serviceTime * 60);
       const localNotification = {
         title: "It's your turn!",
@@ -120,11 +124,13 @@ export default class LinesScreen extends React.Component {
     const userUrl = '/server/users/' + userId + '/';
     this.db.ref(userUrl).on('value', snap => {
       const data = snap.val();
+      console.log(snap.val());
       var userLines = [];
       if (data) {
-        snap.forEach(async line => {
+        snap.forEach(line => {
+          console.log(line.key);
           const lineRef = this.db.ref('server/lines/' + line.key + '/');
-          var newEntry = await Promise.all([
+          Promise.all([
             lineRef.child('event_name').once('value'),
             lineRef.child('description').once('value'),
             lineRef.child('in_line').once('value'),
@@ -132,22 +138,25 @@ export default class LinesScreen extends React.Component {
             lineRef.child('end_time').once('value'),
             lineRef.child('service_time').once('value'),
           ]).then(data => {
+            var inline = JSON.parse(JSON.stringify(data[2]))
+              ? Object.keys(JSON.parse(JSON.stringify(data[2]))).length
+              : 0;
             var lineInfo = {
               name: data[0],
               description: data[1],
-              length: Object.keys(data[2]).length,
+              numPeople: inline,
               image: data[3],
               endTime: data[4],
               serviceTime: data[5],
             };
-            return lineInfo;
-          });
-          newEntry = JSON.parse(JSON.stringify(newEntry));
-          userLines.push(newEntry);
-          this.checkIfNext(line.key);
+            var newEntry = JSON.parse(JSON.stringify(lineInfo));
+            userLines.push(newEntry);
+            this.checkIfNext(line.key);
 
-          ctx.setState({
-            data: userLines,
+            ctx.setState({
+              data: userLines,
+            });
+            console.log(this.state.data);
           });
         });
       } else {

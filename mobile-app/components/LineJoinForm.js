@@ -105,8 +105,4 @@ const styles = StyleSheet.create({
   },
 });
 
-LineJoinForm.propTypes = {
-  lines: PropTypes.func.isRequired,
-};
-
 export default LineJoinForm;

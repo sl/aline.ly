@@ -1,7 +1,7 @@
 import React, { Component } from 'React';
 import PropTypes from 'prop-types';
 
-import { StyleSheet, View, Text, Image,Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
 import firebase from 'firebase';
 
 class Line extends Component {
@@ -24,11 +24,15 @@ class Line extends Component {
   render() {
     return (
       <View style={{ flex: 1, flexDirection: 'row' }}>
-        <Image style={{width: 75, height: 75}}   resizeMode="cover" source={{ uri: this.state.line.image }} />
-        <View style={{ paddingLeft: 10,width: Dimensions.get('window').width - 50 }}>
+        <Image
+          style={{ width: 75, height: 75 }}
+          resizeMode="cover"
+          source={{ uri: this.state.line.image }}
+        />
+        <View style={{ paddingLeft: 10, width: Dimensions.get('window').width - 50 }}>
           <Text style={styles.name}>{this.state.line.name}</Text>
           <Text style={styles.descriptions}>{this.state.line.description}</Text>
-          <Text>{this.state.line.length} people in line</Text>
+          <Text>{this.state.line.numPeople} people in line</Text>
           <Text>Around {this.state.line.serviceTime}min per person</Text>
         </View>
       </View>
@@ -41,13 +45,12 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 15,
-    fontStyle: 'italic'
+    fontStyle: 'italic',
   },
 });
 
 Line.propTypes = {
   line: PropTypes.object.isRequired,
 };
-
 
 export default Line;
