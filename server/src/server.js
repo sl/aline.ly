@@ -68,7 +68,7 @@ server.use(/\/(.*)/, async (req, res) => {
         console.log(val[lineKey])
         lines.append({
           code: val[lineKey].line_code,
-          id: line,
+          id: lineKey,
         })
       })
       var foundLine = false;
