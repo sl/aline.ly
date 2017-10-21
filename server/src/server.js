@@ -63,6 +63,7 @@ server.use(/\/(.*)/, async (req, res) => {
     // check if the line exists
     lines.once('value', (snapshot) => {
       const val = snapshot.val();
+      console.log(val)
       var lines = []
       val.forEach(line => {
         console.log("val" + JSON.stringify(line))
