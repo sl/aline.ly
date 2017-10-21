@@ -62,6 +62,7 @@ server.use(/\/(.*)/, async (req, res) => {
     // check if the line exists
     lines.once('value', (snapshot) => {
       const val = snapshot.val();
+      console.log(val)
       if (id in val) {
         res.redirect(`monitor.html?line_id=${id}`);
       } else {
