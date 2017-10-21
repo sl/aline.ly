@@ -90,15 +90,18 @@ const setup = () => {
       lines.child(key).child('in_line').on('value', () => {
         lines.child(key).once('value', (lineSnapshot) => {
           if (lineSnapshot.val() != null) {
-            moveToActive(lineSnapshot.val());
-            console.log("keey?" + JSON.stringify(Object.keys(lineSnapshot.val())))
+            var data = lineSnapshot.val();
+            data.id = key;
+            moveToActive(data);
           }
         });
       });
       lines.child(key).child('up_next').on('value', () => {
         lines.child(key).once('value', (lineSnapshot) => {
+          var data = lineSnapshot.val();
+          data.id = key;
           if (lineSnapshot.val() != null) {
-            moveToActive(lineSnapshot.val());
+            moveToActive(data);
           }
         });
       });
