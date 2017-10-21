@@ -91,7 +91,7 @@ const setup = () => {
         lines.child(key).once('value', (lineSnapshot) => {
           if (lineSnapshot.val() != null) {
             moveToActive(lineSnapshot.val());
-            console.log("keey?" + JSON.stringify(lineSnapshot.val()))
+            console.log("keey?" + JSON.stringify(lineSnapshot.val().id))
           }
         });
       });
