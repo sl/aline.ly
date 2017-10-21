@@ -67,7 +67,7 @@ server.use(/\/(.*)/, async (req, res) => {
       Object.keys(val).forEach(lineKey => {
         console.log(val[lineKey])
         lines.append({
-          code: val.lineKey.line_code,
+          code: val[lineKey].line_code,
           id: line,
         })
       })
