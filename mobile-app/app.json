@@ -5,7 +5,7 @@
     "slug": "aline",
     "privacy": "public",
     "sdkVersion": "20.0.0",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "primaryColor": "#cccccc",
     "icon": "./assets/icons/app-icon.png",
@@ -25,7 +25,7 @@
     },
     "android": {
       "package": "com.aline.ly",
-      "versionCode": 1,
+      "versionCode": 3,
       "permissions": [
         "VIBRATE",
         "com.android.launcher.permission.INSTALL_SHORTCUT",

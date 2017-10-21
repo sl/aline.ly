@@ -43,6 +43,7 @@ const moveToActive = (line) => {
   }
 
   toMove.forEach((key) => {
+    console.log("keeep" + JSON.stringify(line))
     // add the user to up next
     lines
       .child(line.line_code)

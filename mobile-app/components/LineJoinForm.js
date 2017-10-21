@@ -32,14 +32,13 @@ class LineJoinForm extends Component {
           const userId = firebase.auth().currentUser.uid;
 
           // If line is empty or user is already in the line
-          if ((line.inLine && Object.keys(line.inLine).indexOf(userId) > -1) || !line.inLine) {
-            var inLineUrl = '/server/lines/' + line.code + '/in_line/';
+          if (!line.inLine || Object.keys(line.inLine).indexOf(userId) == -1) {
+            var inLineUrl = '/server/lines/' + line.id + '/in_line/';
             var lineKey = this.db.ref(inLineUrl).child(userId).key;
             var lineUpdates = {};
             lineUpdates[inLineUrl + lineKey] = new Date().getTime();
             this.db.ref().update(lineUpdates);
-
-            var userUrl = '/server/users/' + userId + '/' + line.code + '/';
+            var userUrl = '/server/users/' + userId + '/' + line.id + '/';
             var userUpdates = {};
             userUpdates[userUrl] = new Date().getTime();
             this.db.ref().update(userUpdates);
