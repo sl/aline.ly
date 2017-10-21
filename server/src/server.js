@@ -64,11 +64,11 @@ server.use(/\/(.*)/, async (req, res) => {
     lines.once('value', (snapshot) => {
       const val = JSON.parse(JSON.stringify(snapshot.val()));
       var lines = []
-      Object.keys(val).forEach(line => {
-        console.log(JSON.stringify(val) + "NTH " + JSON.stringify(line))
-        console.log("val" + JSON.stringify(val[line]))
+      Object.keys(val).forEach(lineKey => {
+        console.log(JSON.stringify(val) + "NTH " + JSON.stringify(lineKey))
+        console.log("val" + JSON.stringify(val.lineKey))
         lines.append({
-          code: val.line.line_code,
+          code: val.lineKey.line_code,
           id: line,
         })
       })
