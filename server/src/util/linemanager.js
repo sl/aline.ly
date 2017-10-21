@@ -43,25 +43,24 @@ const moveToActive = (line) => {
   }
 
   toMove.forEach((key) => {
-    console.log("keeep" + JSON.stringify(line))
     // add the user to up next
     lines
-      .child(line.line_code)
+      .child(line.id)
       .child('up_next')
       .child(key)
       .set(inLineValue[key]);
 
     // remove them from in line
     lines
-      .child(line.line_code)
+      .child(line.id)
       .child('in_line')
       .child(key)
       .remove();
 
-    db.ref('/server/users/' + key + '/').child(line.line_code).set(-1)
+    db.ref('/server/users/' + key + '/').child(line.id).set(-1)
 
     // set timer after which to remove the user from up next
-    setTimeout(() => removeFromUpNext(key, line.line_code),
+    setTimeout(() => removeFromUpNext(key, line.id),
       line.service_time * 1000 * 60);
 
     // send a twilio message to the user
@@ -73,7 +72,7 @@ const moveToActive = (line) => {
       if (key in phoneValues) {
         // found a phone number, send a message to it
         const phoneNumber = phoneValues[key];
-        twilioSender.sendAlertText(phoneNumber, line.event_name, line.line_code);
+        twilioSender.sendAlertText(phoneNumber, line.event_name, line.id);
       }
     });
   });
