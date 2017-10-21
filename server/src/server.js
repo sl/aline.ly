@@ -62,11 +62,11 @@ server.use(/\/(.*)/, async (req, res) => {
   } else {
     // check if the line exists
     lines.once('value', (snapshot) => {
-      const val = snapshot.val();
+      const val = JSON.parse(JSON.stringify(snapshot.val()));
       var lines = []
       Object.keys(val).forEach(line => {
         console.log(line)
-        console.log("val" + JSON.stringify(line))
+        console.log("val" + JSON.stringify(val.line))
         lines.append({
           code: val.line.line_code,
           id: line,
