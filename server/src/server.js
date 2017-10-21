@@ -74,7 +74,7 @@ server.use(/\/(.*)/, async (req, res) => {
         if (id == line.code){
           res.redirect(`monitor.html?line_id=${line.id}`);
           foundLine = true;
-        })
+        }
       })
       if (!foundLine) {
         res.redirect('404.html');
