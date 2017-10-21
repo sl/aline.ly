@@ -63,13 +63,13 @@ server.use(/\/(.*)/, async (req, res) => {
     // check if the line exists
     lines.once('value', (snapshot) => {
       const val = snapshot.val();
-      console.log(Object.keys(val))
       var lines = []
-      val.forEach(line => {
+      Object.keys(val).forEach(line => {
+        console.log(line)
         console.log("val" + JSON.stringify(line))
         lines.append({
-          code: line.line_code,
-          id: line.key,
+          code: val.line.line_code,
+          id: line,
         })
       })
       var foundLine = false;
