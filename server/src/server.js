@@ -56,6 +56,7 @@ server.get('/api/lines', async (req, res) => {
 
 server.use(/\/(.*)/, async (req, res) => {
   const id = req.params[0];
+  console.log("this one")
   if (!shortid.isValid(id)) {
     res.redirect('404.html');
   } else {
@@ -63,10 +64,11 @@ server.use(/\/(.*)/, async (req, res) => {
     lines.once('value', (snapshot) => {
       const val = snapshot.val();
       var lines = []
-      Object.keys(val).forEach(line => {
+      val.forEach(line => {
+        console.log("val" + JSON.stringify(line))
         lines.append({
-          code: val.line.line_code,
-          id: line,
+          code: line.line_code,
+          id: line.key,
         })
       })
       var foundLine = false;
