@@ -63,16 +63,16 @@ server.use(/\/(.*)/, async (req, res) => {
     // check if the line exists
     lines.once('value', (snapshot) => {
       const val = JSON.parse(JSON.stringify(snapshot.val()));
-      var lines = [];
+      var presentLines = [];
       Object.keys(val).forEach(lineKey => {
         console.log(val[lineKey])
-        lines.append({
+        presentLines.append({
           code: val[lineKey].line_code,
           id: lineKey,
         })
       })
       var foundLine = false;
-      lines.forEach(line => {
+      presentLines.forEach(line => {
         if (id == line.code){
           res.redirect(`monitor.html?line_id=${line.id}`);
           foundLine = true;
