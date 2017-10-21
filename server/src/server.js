@@ -62,10 +62,21 @@ server.use(/\/(.*)/, async (req, res) => {
     // check if the line exists
     lines.once('value', (snapshot) => {
       const val = snapshot.val();
-      console.log(val)
-      if (id in val) {
-        res.redirect(`monitor.html?line_id=${id}`);
-      } else {
+      var lines = []
+      Object.keys(val).forEach(line => {
+        lines.append({
+          code: val.line.line_code,
+          id: line,
+        })
+      })
+      var foundLine = false;
+      lines.forEach(line => {
+        if (id == line.code){
+          res.redirect(`monitor.html?line_id=${line.id}`);
+          foundLine = true;
+        })
+      })
+      if (!foundLine) {
         res.redirect('404.html');
       }
     });
